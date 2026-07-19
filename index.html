@@ -1,0 +1,2385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 Rōnin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0b0e14;
+            color: #e8edf5;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            padding: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        /* ===== ХЕДЕР ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .header-inner {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            color: #f5c542;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin: 0;
+            display: inline-block;
+            text-shadow: 0 0 30px rgba(245,197,66,0.15);
+        }
+        .flag {
+            display: inline-block;
+            width: 44px;
+            height: 44px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 0 2px #2f3a48,
+                0 4px 20px rgba(0,0,0,0.4),
+                inset 0 0 30px rgba(255,255,255,0.05);
+            transition: transform 0.2s;
+            cursor: default;
+        }
+        .flag-circle {
+            font-size: 0;
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            background: radial-gradient(circle at 45% 40%, #ff4a4a, #bc002d);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 20px rgba(188,0,45,0.3),
+                inset 0 -2px 4px rgba(0,0,0,0.2);
+        }
+        .sub-title {
+            text-align: center;
+            color: #8899aa;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            margin-bottom: 24px;
+            font-weight: 300;
+        }
+        
+        /* ===== ОСТАЛЬНЫЕ СТИЛИ ===== */
+        .top-tabs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .top-tab {
+            background: #1a212b;
+            border: 2px solid #2f3a48;
+            color: #bcc9db;
+            padding: 10px 34px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .top-tab.active {
+            border-color: #f5c542;
+            background: #f5c542;
+            color: #0b0e14;
+        }
+        .top-tab:hover { background: #2a3545; }
+        .top-tab.active:hover { background: #f5c542; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        
+        .version-selector {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .version-btn {
+            background: #1a212b;
+            border: 2px solid #2f3a48;
+            color: #bcc9db;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .version-btn.active {
+            border-color: #f5c542;
+            background: #f5c542;
+            color: #0b0e14;
+        }
+        .version-btn:hover { background: #2a3545; }
+        .version-btn.active:hover { background: #f5c542; }
+        
+        .topic-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: #11181f;
+            border-radius: 10px;
+            border: 1px solid #26303d;
+        }
+        .topic-btn {
+            background: #1a212b;
+            border: 1px solid #2f3a48;
+            color: #bcc9db;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .topic-btn.active {
+            border-color: #f5c542;
+            background: #f5c542;
+            color: #0b0e14;
+        }
+        .topic-btn:hover { background: #2a3545; }
+        .topic-btn.active:hover { background: #f5c542; }
+        
+        .info-line {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            background: #11181f;
+            padding: 8px 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #26303d;
+            font-size: 0.9rem;
+        }
+        .info-line span { color: #f0e6c5; font-weight: 600; }
+        
+        .progress-bar {
+            background: #1e2633;
+            border-radius: 30px;
+            height: 20px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            border: 1px solid #2f3a48;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f5c542, #f0a030);
+            transition: width 0.2s;
+            border-radius: 30px;
+            color: #0b0e14;
+            font-weight: 700;
+            font-size: 0.7rem;
+            line-height: 20px;
+            padding-left: 10px;
+            white-space: nowrap;
+        }
+        
+        .course-wrap {
+            background: #141a22;
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px solid #26303d;
+        }
+        .day-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+        .day-nav.hidden { display: none; }
+        .day-btn {
+            background: #2a3545;
+            border: 1px solid #3a4a5a;
+            color: #bcc9db;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: 0.15s;
+        }
+        .day-btn:hover { background: #3a4a5a; }
+        .day-btn.active { background: #f5c542; color: #0b0e14; border-color: #f5c542; font-weight: 600; }
+        .day-btn.done { border-color: #2d6a4f; color: #8bc9a8; }
+        
+        .q-item {
+            margin: 14px 0 4px 0;
+            font-weight: 500;
+            color: #f0e6c5;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .q-item .toggle {
+            display: inline-block;
+            width: 20px; height: 20px;
+            background: #2a3545;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 0.7rem;
+            color: #8899aa;
+            flex-shrink: 0;
+        }
+        .q-item .toggle.open { background: #f5c542; color: #0b0e14; }
+        .answers {
+            margin-left: 30px;
+            padding-left: 14px;
+            border-left: 2px solid #2f3a48;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease;
+        }
+        .answers.open { max-height: 600px; }
+        .ans { color: #b0c0d0; margin: 4px 0; font-size: 0.9rem; }
+        .ans strong { color: #d0dce8; }
+        
+        .check-block, .exam-block {
+            background: #1e2633;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin: 10px 0;
+        }
+        .check-block { border-left: 5px solid #b9770e; }
+        .exam-block { border-left: 5px solid #8b2f2f; }
+        
+        .side-card {
+            background: #141a22;
+            border-radius: 16px;
+            padding: 16px 18px;
+            border: 1px solid #26303d;
+        }
+        .side-card h3 {
+            color: #f5c542;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #2a3545;
+            padding-bottom: 6px;
+        }
+        .side-card .item {
+            font-size: 0.9rem;
+            margin: 4px 0;
+            color: #d0dce8;
+        }
+        .side-card .item small {
+            color: #8899aa;
+            display: block;
+            font-size: 0.8rem;
+        }
+        
+        .tip-section {
+            margin: 12px 0;
+            padding: 10px 14px;
+            background: #11181f;
+            border-radius: 8px;
+            border-left: 3px solid #f5c542;
+        }
+        .tip-section h4 {
+            color: #f5c542;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+        .tip-section p, .tip-section li {
+            color: #b0c0d0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        .tip-section ul {
+            margin: 4px 0 0 18px;
+        }
+        .tip-section a {
+            color: #f5c542;
+            text-decoration: none;
+        }
+        .tip-section a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 16px;
+            border-top: 1px solid #1e2633;
+        }
+        .footer p {
+            color: #5a6a7a;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin: 2px 0;
+        }
+        .footer .sub {
+            color: #3a4a5a;
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+        
+        .btn-reset {
+            background: #2a3545;
+            border: none;
+            color: #e8edf5;
+            padding: 6px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .btn-reset:hover { background: #3a4a5a; }
+        
+        .empty-block {
+            color: #8899aa;
+            padding: 30px 0;
+            text-align: center;
+        }
+        .empty-block strong { color: #f0e6c5; }
+        
+        .note-area {
+            width: 100%;
+            min-height: 150px;
+            background: #11181f;
+            border: 1px solid #2f3a48;
+            border-radius: 12px;
+            color: #e8edf5;
+            padding: 14px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+        .note-area:focus { outline: 2px solid #f5c542; }
+        .btn-save {
+            background: #2a3545;
+            border: none;
+            color: #e8edf5;
+            padding: 8px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        .btn-save:hover { background: #3a4a5a; }
+        
+        /* ===== ПЛАН ПОЕЗДКИ ===== */
+        .plan-day {
+            background: #11181f;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 14px;
+            border: 1px solid #26303d;
+            transition: border-color 0.3s;
+        }
+        .plan-day:hover {
+            border-color: #3a4a5a;
+        }
+        .plan-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .plan-day-header h4 {
+            color: #f5c542;
+            font-size: 0.95rem;
+        }
+        .plan-day-header .day-toggle {
+            background: #2a3545;
+            border: none;
+            color: #bcc9db;
+            padding: 2px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: 0.2s;
+        }
+        .plan-day-header .day-toggle:hover {
+            background: #3a4a5a;
+        }
+        .plan-day textarea {
+            width: 100%;
+            min-height: 200px;
+            background: #0b0e14;
+            border: 1px solid #2a3545;
+            border-radius: 8px;
+            color: #e8edf5;
+            padding: 12px;
+            font-size: 0.85rem;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.6;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+        .plan-day textarea:focus {
+            border-color: #f5c542;
+            outline: none;
+        }
+        .plan-day .day-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        .plan-day .day-actions button {
+            background: #2a3545;
+            border: none;
+            color: #e8edf5;
+            padding: 4px 14px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: 0.2s;
+        }
+        .plan-day .day-actions button:hover {
+            background: #3a4a5a;
+        }
+        .plan-day .day-actions .btn-danger {
+            color: #e8a0a0;
+        }
+        .plan-day .day-actions .btn-danger:hover {
+            background: #3a1a1a;
+        }
+        
+        .plan-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 16px;
+        }
+        .plan-actions .btn-primary {
+            background: #f5c542;
+            color: #0b0e14;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .plan-actions .btn-primary:hover {
+            background: #e0b030;
+        }
+        .plan-actions button {
+            background: #2a3545;
+            color: #e8edf5;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .plan-actions button:hover {
+            background: #3a4a5a;
+        }
+        .save-status {
+            color: #6a7a8a;
+            font-size: 0.85rem;
+        }
+        
+        /* ===== ЧЕК-ЛИСТ ===== */
+        .checklist-section {
+            margin: 14px 0;
+        }
+        .checklist-section h4 {
+            color: #f5c542;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 4px;
+        }
+        .checklist-item:hover {
+            background: #1a212b;
+        }
+        .checklist-item input[type="checkbox"] {
+            accent-color: #f5c542;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .checklist-item label {
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #d0dce8;
+            transition: all 0.3s;
+        }
+        .checklist-item.done label {
+            text-decoration: line-through;
+            color: #5a6a7a;
+        }
+        .checklist-item.done {
+            opacity: 0.7;
+        }
+        .checklist-progress {
+            background: #1e2633;
+            border-radius: 10px;
+            height: 6px;
+            overflow: hidden;
+            margin: 8px 0 12px 0;
+        }
+        .checklist-progress .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2d6a4f, #f5c542);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        .checklist-stats {
+            color: #8899aa;
+            font-size: 0.75rem;
+            text-align: right;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes checkAnim {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .fade-in {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+        .check-anim {
+            animation: checkAnim 0.3s ease;
+        }
+        
+        @media (max-width: 600px) {
+            .plan-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .plan-actions button {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== ХЕДЕР ===== -->
+<div class="header">
+    <div class="header-inner">
+        <span style="font-size: 2.2rem;">🗾</span>
+        <h1>4 Rōnin</h1>
+        <span class="flag">
+            <span class="flag-circle"></span>
+        </span>
+    </div>
+</div>
+<div class="sub-title">Путь Гайдзина</div>
+
+<!-- ===== ВКЛАДКИ ===== -->
+<div class="top-tabs">
+    <button class="top-tab active" data-tab="tab-course">📘 Курс</button>
+    <button class="top-tab" data-tab="tab-trip">🗺️ План поездки</button>
+    <button class="top-tab" data-tab="tab-tips">💡 Лайфхаки</button>
+</div>
+
+<!-- ===== КУРС ===== -->
+<div id="tab-course" class="tab-pane active">
+    <div class="version-selector">
+        <button class="version-btn active" data-version="min">MIN</button>
+        <button class="version-btn" data-version="medium">MEDIUM</button>
+        <button class="version-btn" data-version="full">FULL</button>
+        <button class="version-btn" data-version="numbers">🔢 Числа</button>
+        <button class="version-btn" data-version="emergency">🚨 Экстренное</button>
+    </div>
+
+    <div class="info-line">
+        <div>Фраз: <span id="totalPhrases">0</span></div>
+        <div>Дней: <span id="totalDays">0</span></div>
+        <div>Ответов: <span id="totalAnswers">0</span></div>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill">0%</div>
+    </div>
+
+    <div class="course-wrap">
+        <div class="topic-selector" id="topicSelector"></div>
+        <div class="day-nav" id="dayNav"></div>
+        <div id="courseContent">
+            <div class="empty-block"><strong>Выбери версию</strong><br>MIN · MEDIUM · FULL</div>
+        </div>
+    </div>
+
+    <!-- ===== ФУТЕР КУРСА ===== -->
+    <div style="margin-top:20px; text-align:center; color:#5a6a7a; font-size:0.8rem; border-top:1px solid #1e2633; padding-top:16px;">
+        <button class="btn-reset" id="resetProgress">Сбросить прогресс</button>
+        <br><br>
+        <span id="footerStats">FULL · 74 дней · 162 фраз · 486 ответов</span>
+    </div>
+</div>
+
+<!-- ===== ПЛАН ПОЕЗДКИ ===== -->
+<div id="tab-trip" class="tab-pane">
+    <div class="side-card">
+        <h3>🗺️ План поездки 
+            <span style="font-size:0.7rem; color:#6a7a8a; font-weight:400;">(редактируемый)</span>
+        </h3>
+        
+        <div id="planContainer">
+            <!-- Сюда динамически загружаются дни -->
+        </div>
+        
+        <div class="plan-actions">
+            <button class="btn-primary" id="savePlan">💾 Сохранить все дни</button>
+            <button id="addDayBtn">➕ Добавить день</button>
+            <button id="resetPlan">🔄 Сбросить</button>
+            <span class="save-status" id="planSaveStatus"></span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ЛАЙФХАКИ ===== -->
+<div id="tab-tips" class="tab-pane">
+    <div class="side-card">
+        <h3>💡 Лайфхаки для путешествия</h3>
+        
+        <!-- ===== ЧЕК-ЛИСТ ДО ПОЕЗДКИ ===== -->
+        <div class="tip-section" style="border-left-color: #8a6a4a;">
+            <h4>📋 Чек-лист: что сделать ДО поездки</h4>
+            <div class="checklist-progress">
+                <div class="fill" id="checklistProgress"></div>
+            </div>
+            <div class="checklist-stats" id="checklistStats">0 из 0 выполнено</div>
+            <div id="checklistContainer"></div>
+        </div>
+        
+        <!-- ===== ОСАКА ===== -->
+        <div class="tip-section" style="border-left-color: #f5c542;">
+            <h4>✈️ Осака — прилёт и первое знакомство</h4>
+            <ul>
+                <li><strong>Аэропорт KIX → город:</strong> поезд Haruka до Осаки (45 мин, ~1700¥) или автобус (~1600¥)</li>
+                <li><strong>ICOCA карта:</strong> купить в автомате на вокзале (2000¥, включая 500¥ депозит), пополнять в конбини</li>
+                <li><strong>Дотонбори:</strong> главная улица с едой, светом и гигантскими вывесками — обязательно вечером</li>
+                <li><strong>Окономияки:</strong> местная пицца-блин, попробовать в Мидзуно (от 800¥)</li>
+                <li><strong>Такояки:</strong> шарики с осьминогом — перекус на ходу (от 500¥ за 6 шт.)</li>
+                <li><strong>Куронмаркет:</strong> крытый рынок с морепродуктами и сувенирами (открыт до 17:00)</li>
+                <li><strong>Замок Осака:</strong> вход 600¥, красивый парк вокруг</li>
+            </ul>
+        </div>
+
+        <!-- ===== КИОТО ===== -->
+        <div class="tip-section" style="border-left-color: #b9770e;">
+            <h4>🏯 Киото — древняя столица</h4>
+            <ul>
+                <li><strong>Как добраться из Осаки:</strong> JR Kyoto Line (30 мин, 580¥) или Hankyu Kyoto Line (45 мин, 400¥)</li>
+                <li><strong>Автобусный день:</strong> 1-day pass (600¥) — покрывает большинство храмов</li>
+                <li><strong>Фусими Инари:</strong> приходите до 8:00 или после 16:00, чтобы избежать толп (бесплатно)</li>
+                <li><strong>Кимоно:</strong> аренда на день от 3000¥ (включает причёску)</li>
+                <li><strong>Киёмидзу-дэра:</strong> лучший вид на город на закате (вход 400¥)</li>
+                <li><strong>Гион:</strong> район гейш, не фотографируйте их без разрешения</li>
+                <li><strong>Мацуба:</strong> местный десерт из сладкой фасоли (~300¥)</li>
+                <li><strong>Бамбуковый лес Арасияма:</strong> бесплатно, лучше утром до 9:00</li>
+            </ul>
+        </div>
+
+        <!-- ===== ТОКИО ===== -->
+        <div class="tip-section" style="border-left-color: #8b2f2f;">
+            <h4>🗼 Токио — финал и вылет</h4>
+            <ul>
+                <li><strong>Как добраться из Киото:</strong> Синкансэн (2.5 часа, ~14000¥) — по JR Pass бесплатно</li>
+                <li><strong>Метро:</strong> Tokyo Metro 24h ticket (600¥) — выгодно для активного дня</li>
+                <li><strong>Сибуя:</strong> перекрёсток — легенда, смотровая Shibuya Sky (1800¥, бронировать онлайн)</li>
+                <li><strong>Акихабара:</strong> район электроники, аниме и игровых автоматов</li>
+                <li><strong>Сэнсо-дзи (Асакуса):</strong> главный храм Токио, бесплатно, рядом улица Накамисэ с сувенирами</li>
+                <li><strong>Цукидзи:</strong> рынок с тунцом — идти в 5:00-6:00, смотреть аукцион</li>
+                <li><strong>Выезд:</strong> из Нарита (NRT) или Ханэды (HND). До Нарита: Narita Express (1 час, ~3000¥) или автобус (~1000¥)</li>
+            </ul>
+        </div>
+
+        <!-- ===== ЦЕНЫ ===== -->
+        <div class="tip-section" style="border-left-color: #2d6a4f;">
+            <h4>💰 Цены в Японии (октябрь 2026)</h4>
+            <ul>
+                <li><strong>JR Pass (7 дней):</strong> ~50 000¥ (обычный), ~65 000¥ (зелёный) — покупать ДО поездки</li>
+                <li><strong>Синкансэн (Токио→Киото):</strong> ~14 000¥ (без JR Pass)</li>
+                <li><strong>Отель (бизнес-отель):</strong> 8 000-15 000¥/ночь</li>
+                <li><strong>Капсула:</strong> 3 000-6 000¥/ночь</li>
+                <li><strong>Хостел:</strong> 2 500-4 500¥/ночь</li>
+                <li><strong>Обед в конбини:</strong> 500-800¥</li>
+                <li><strong>Обед в кафе/ресторане:</strong> 1 000-2 500¥</li>
+                <li><strong>Рамен:</strong> 800-1 200¥</li>
+                <li><strong>Суши (конвейер):</strong> 150-500¥ за тарелку</li>
+                <li><strong>Пиво в баре:</strong> 500-800¥</li>
+                <li><strong>Коктейль:</strong> 800-1 500¥</li>
+                <li><strong>Вход в храм:</strong> 300-600¥</li>
+                <li><strong>Музей/замок:</strong> 600-1 500¥</li>
+                <li><strong>Сим-карта (eSIM, 7 дней):</strong> ~3 000¥</li>
+                <li><strong>Pocket Wi-Fi (7 дней):</strong> ~5 000¥</li>
+                <li><strong>Такси (первые 2 км):</strong> ~500-700¥</li>
+                <li><strong>Метро/автобус (одна поездка):</strong> 170-300¥</li>
+            </ul>
+        </div>
+
+        <!-- ===== ССЫЛКИ ===== -->
+        <div class="tip-section" style="border-left-color: #4a6a8a;">
+            <h4>🔗 Полезные ссылки</h4>
+            <ul>
+                <li><strong>JR Pass:</strong> <a href="https://www.japanrailpass.net" target="_blank">japanrailpass.net</a></li>
+                <li><strong>Бронирование отелей:</strong> <a href="https://www.booking.com" target="_blank">Booking.com</a>, <a href="https://www.agoda.com" target="_blank">Agoda</a>, <a href="https://www.airbnb.com" target="_blank">Airbnb</a></li>
+                <li><strong>Карты и навигация:</strong> <a href="https://www.google.com/maps" target="_blank">Google Maps</a>, <a href="https://www.navitime.co.jp" target="_blank">Navitime</a></li>
+                <li><strong>eSIM:</strong> <a href="https://www.ubigi.com" target="_blank">Ubigi</a>, <a href="https://www.airalo.com" target="_blank">Airalo</a>, <a href="https://www.holafly.com" target="_blank">Holafly</a></li>
+                <li><strong>Pocket Wi-Fi:</strong> <a href="https://www.japan-wireless.com" target="_blank">Japan Wireless</a>, <a href="https://www.globaladvancedcomm.com" target="_blank">Global Advanced</a></li>
+                <li><strong>Билеты на самолёт:</strong> <a href="https://www.skyscanner.ru" target="_blank">Skyscanner</a>, <a href="https://www.aviasales.ru" target="_blank">Aviasales</a></li>
+                <li><strong>Страховка:</strong> <a href="https://www.tripinsurance.ru" target="_blank">Tripinsurance</a>, <a href="https://www.sravni.ru" target="_blank">Sravni</a></li>
+                <li><strong>Погода:</strong> <a href="https://www.jma.go.jp" target="_blank">JMA (Japan Meteorological Agency)</a></li>
+                <li><strong>Аэропорты:</strong> <a href="https://www.kansai-airport.co.jp" target="_blank">KIX (Осака)</a>, <a href="https://www.narita-airport.jp" target="_blank">NRT (Токио)</a></li>
+                <li><strong>Курс валют:</strong> <a href="https://www.google.com/search?q=usd+to+jpy" target="_blank">USD→JPY</a>, <a href="https://www.google.com/search?q=eur+to+jpy" target="_blank">EUR→JPY</a></li>
+            </ul>
+        </div>
+
+        <!-- ===== ПОГОДА В ОКТЯБРЕ ===== -->
+        <div class="tip-section" style="border-left-color: #6a8a9a;">
+            <h4>🌤️ Погода в Японии в октябре</h4>
+            <ul>
+                <li><strong>Температура:</strong> +18°C…+24°C (днём), +12°C…+16°C (ночью)</li>
+                <li><strong>Осака:</strong> +20°C…+25°C, дожди ~8 дней</li>
+                <li><strong>Киото:</strong> +18°C…+23°C, дожди ~7 дней</li>
+                <li><strong>Токио:</strong> +19°C…+24°C, дожди ~6 дней</li>
+                <li><strong>Влажность:</strong> 65-75% — может быть душно</li>
+                <li><strong>Что взять:</strong>
+                    <ul>
+                        <li>Тонкую куртку или ветровку (на вечер)</li>
+                        <li>Свитер или лёгкий пуловер</li>
+                        <li>Футболки с длинным рукавом</li>
+                        <li>Зонт компактный (обязательно!)</li>
+                        <li>Удобную обувь (ходить много)</li>
+                        <li>Дождевик (пончо) — на случай ливня</li>
+                        <li>Шарф — может пригодиться вечером</li>
+                    </ul>
+                </li>
+                <li><strong>Что НЕ брать:</strong>
+                    <ul>
+                        <li>Тёплую зимнюю куртку (будет жарко)</li>
+                        <li>Пуховик — перебор</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- ===== ЗАМЕТКИ ===== -->
+        <div style="margin-top:20px;">
+            <h3 style="color:#f5c542; font-size:1rem; border-bottom:1px solid #2a3545; padding-bottom:6px;">📝 Мои заметки</h3>
+            <textarea id="notes" class="note-area" placeholder="Сохраняйте свои заметки, ссылки, контакты…"></textarea>
+            <br>
+            <button class="btn-save" id="saveNotes">💾 Сохранить заметки</button>
+            <span id="saveStatus" style="margin-left:14px; color:#6a7a8a; font-size:0.85rem;"></span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== ФУТЕР ===== -->
+<div class="footer">
+    <p>アプリは Sergei Dzihilev によって作成されました</p>
+    <p class="sub">App created by Sergei Dzihilev</p>
+</div>
+
+<script>
+// ============================================================
+// ДАННЫЕ КУРСА (полная версия из предыдущего файла)
+// ============================================================
+
+const courseData = { min: [], medium: [], full: [] };
+
+// ---------- ФАЗА 1: ДОРОГА (дни 1-14) ----------
+const phase1 = [];
+
+phase1.push({
+    type: 'lesson',
+    title: 'День 1',
+    questions: [
+        { q: 'Тойрэ ва доко дэсу ка? — Где туалет?', answers: ['Асоко дэс — Вон там', 'Никай дэс — На втором этаже', 'Миги ни аримас — Справа'] },
+        { q: 'Эки ва доко дэсу ка? — Где вокзал?', answers: ['Массугу дэс — Прямо', 'Хидари ни аримас — Слева', 'Асоко ни аримас — Вон там'] },
+        { q: 'Хотэру ва доко дэсу ка? — Где отель?', answers: ['Коко дэс — Здесь', 'Мукаи дэс — Напротив', 'Миги ни аримас — Справа'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 2',
+    questions: [
+        { q: 'Дэгути ва доко дэсу ка? — Где выход?', answers: ['Асоко дэс — Вон там', 'Хидари ни аримас — Слева', 'Массугу дэс — Прямо'] },
+        { q: 'Иригути ва доко дэсу ка? — Где вход?', answers: ['Коко дэс — Здесь', 'Миги ни аримас — Справа', 'Асоко дэс — Вон там'] },
+        { q: 'Эрэбээтаа ва доко дэсу ка? — Где лифт?', answers: ['Миги ни аримас — Справа', 'Асоко дэс — Вон там', 'Коко дэс — Здесь'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 3',
+    questions: [
+        { q: 'Кайдан ва доко дэсу ка? — Где лестница?', answers: ['Хидари ни аримас — Слева', 'Асоко дэс — Вон там', 'Коко дэс — Здесь'] },
+        { q: 'Той дэсу ка? — Это далеко?', answers: ['Хай, той дэс — Да, далеко', 'Ииэ, тикай дэс — Нет, близко', 'Тётто той дэс — Немного далеко'] },
+        { q: 'Тикай дэсу ка? — Это близко?', answers: ['Хай, тикай дэс — Да, близко', 'Ииэ, той дэс — Нет, далеко', 'Сугу соко дэс — Прямо здесь'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 4',
+    questions: [
+        { q: 'Массугу дэсу ка? — Прямо?', answers: ['Хай, массугу дэс — Да, прямо', 'Ииэ, миги дэс — Нет, направо', 'Ииэ, хидари дэс — Нет, налево'] },
+        { q: 'Миги дэсу ка? — Направо?', answers: ['Хай, миги дэс — Да, направо', 'Ииэ, хидари дэс — Нет, налево', 'Ииэ, массугу дэс — Нет, прямо'] },
+        { q: 'Хидари дэсу ка? — Налево?', answers: ['Хай, хидари дэс — Да, налево', 'Ииэ, миги дэс — Нет, направо', 'Ииэ, массугу дэс — Нет, прямо'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 5',
+    questions: [
+        { q: 'Коко дэсу ка? — Здесь?', answers: ['Хай, коко дэс — Да, здесь', 'Ииэ, асоко дэс — Нет, вон там', 'Ииэ, соко дэс — Нет, там'] },
+        { q: 'Асоко дэсу ка? — Вон там?', answers: ['Хай, асоко дэс — Да, вон там', 'Ииэ, коко дэс — Нет, здесь', 'Ииэ, соко дэс — Нет, там'] },
+        { q: 'Тидзу ва доко дэсу ка? — Где карта?', answers: ['Коко ни аримас — Здесь', 'Асоко ни аримас — Вон там', 'Соко ни аримас — Там'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 6',
+    questions: [
+        { q: 'Коно хотэру ва доко дэсу ка? — Где этот отель?', answers: ['Асоко дэс — Вон там', 'Миги ни аримас — Справа', 'Мукаи дэс — Напротив'] },
+        { q: 'Тойрэ о сагаситэ имас — Я ищу туалет.', answers: ['Асоко ни аримас — Вон там', 'Миги ни аримас — Справа', 'Никай дэс — На втором этаже'] },
+        { q: 'Эки о сагаситэ имас — Я ищу вокзал.', answers: ['Массугу дэс — Прямо', 'Хидари ни аримас — Слева', 'Асоко ни аримас — Вон там'] }
+    ]
+});
+phase1.push({ type: 'check', title: 'День 7 — ПРОВЕРКА', text: '10 случайных фраз из дней 1–6' });
+
+phase1.push({
+    type: 'lesson',
+    title: 'День 8',
+    questions: [
+        { q: 'Эки э ва до: иттэ икэба ии дэсу ка? — Как пройти на вокзал?', answers: ['Массугу иттэ кудасай — Идите прямо', 'Миги ни магаттэ кудасай — Поверните направо', 'Хидари ни магаттэ кудасай — Поверните налево'] },
+        { q: 'Хотэру мадэ до: иттэ икэба ии дэсу ка? — Как дойти до отеля?', answers: ['Массугу дэс — Прямо', 'Миги ни магаттэ кудасай — Поверните направо', 'Асоко ни аримас — Вон там'] },
+        { q: 'Аруйтэ доно курай какаримас ка? — Сколько идти пешком?', answers: ['Го-фун дэс — 5 минут', 'Дзюппун дэс — 10 минут', 'Ни-дзюппун дэс — 20 минут'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 9',
+    questions: [
+        { q: 'Мити о вататтэ кудасай — Перейдите дорогу.', answers: ['Хай — Да', 'Вакаримасита — Понял', 'Коко дэсу ка? — Здесь?'] },
+        { q: 'Кадо о магаттэ кудасай — Поверните за углом.', answers: ['Хай — Да', 'Вакаримасита — Понял', 'Миги дэсу ка? — Направо?'] },
+        { q: 'Мукаи дэсу ка? — Это напротив?', answers: ['Хай, мукаи дэс — Да, напротив', 'Ииэ, тон ари дэс — Нет, рядом', 'Ииэ, асоко дэс — Нет, вон там'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 10',
+    questions: [
+        { q: 'Басу-тэй ва доко дэсу ка? — Где автобусная остановка?', answers: ['Асоко ни аримас — Вон там', 'Миги ни аримас — Справа', 'Коко ни аримас — Здесь'] },
+        { q: 'Тикатэцу но эки ва доко дэсу ка? — Где станция метро?', answers: ['Асоко ни аримас — Вон там', 'Хидари ни аримас — Слева', 'Массугу дэс — Прямо'] },
+        { q: 'Коно хотэру ва нанкай дэсу ка? — На каком этаже этот отель?', answers: ['Иккай дэс — На первом', 'Сангай дэс — На третьем', 'Гокай дэс — На пятом'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 11',
+    questions: [
+        { q: 'О-тэарай ва доко дэсу ка? — Где туалет? (вежливо)', answers: ['Асоко дэс — Вон там', 'Никай дэс — На втором этаже', 'Миги ни аримас — Справа'] },
+        { q: 'Коно тикаку ни конбини ва аримас ка? — Рядом есть магазин?', answers: ['Хай, аримас — Да, есть', 'Ииэ, аримасэн — Нет, нет', 'Асоко ни аримас — Вон там'] },
+        { q: 'Конбини ва доко дэсу ка? — Где магазин?', answers: ['Асоко ни аримас — Вон там', 'Миги ни аримас — Справа', 'Коко ни аримас — Здесь'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 12',
+    questions: [
+        { q: 'Канбан ва доко ни аримас ка? — Где вывеска?', answers: ['Асоко ни аримас — Вон там', 'Уэ ни аримас — Сверху', 'Миги ни аримас — Справа'] },
+        { q: 'Синай тидзу ва доко ни аримас ка? — Где карта города?', answers: ['Асоко ни аримас — Вон там', 'Коко ни аримас — Здесь', 'Аннайдзё ни аримас — В справочной'] },
+        { q: 'Кайдан ва доко дэсу ка? — Где лестница?', answers: ['Асоко дэс — Вон там', 'Миги ни аримас — Справа', 'Хидари ни аримас — Слева'] }
+    ]
+});
+phase1.push({
+    type: 'lesson',
+    title: 'День 13',
+    questions: [
+        { q: 'Эсукарэ:таа ва доко дэсу ка? — Где эскалатор?', answers: ['Асоко дэс — Вон там', 'Миги ни аримас — Справа', 'Хидари ни аримас — Слева'] },
+        { q: 'Тойрэ ва нанкай дэсу ка? — На каком этаже туалет?', answers: ['Иккай дэс — На первом', 'Никай дэс — На втором', 'Сангай дэс — На третьем'] },
+        { q: 'Коно тикаку ни эки ва аримас ка? — Рядом есть вокзал?', answers: ['Хай, аримас — Да, есть', 'Ииэ, аримасэн — Нет, нет', 'Асоко ни аримас — Вон там'] }
+    ]
+});
+phase1.push({ type: 'check', title: 'День 14 — ПРОВЕРКА', text: '10 случайных фраз из дней 8–13' });
+
+// ---------- ФАЗА 2: ЕДА (дни 15-28) ----------
+const phase2 = [];
+
+phase2.push({
+    type: 'lesson',
+    title: 'День 15',
+    questions: [
+        { q: 'Онака га сукимасита — Я голоден.', answers: ['Наника табэмас ка? — Что-нибудь поедите?', 'Рэсуторан ни икимас ка? — Пойдём в ресторан?', 'Нани о табэтай дэсу ка? — Что хотите поесть?'] },
+        { q: 'Наника табэтай дэсу ка? — Хотите что-нибудь поесть?', answers: ['Хай, табэтай дэс — Да, хочу', 'Ииэ, кэкко: дэс — Нет, спасибо', 'Тётто онака га сукимасита — Немного голоден'] },
+        { q: 'Мэнью: о кудасай — Дайте меню, пожалуйста.', answers: ['Хай, до:дзо — Да, пожалуйста', 'Котира га мэнью: дэс — Вот меню', 'Наника о сагаситэ дэсу ка? — Что-то ищете?'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 16',
+    questions: [
+        { q: 'Корэ ва нан дэсу ка? — Что это?', answers: ['Корэ ва суси дэс — Это суши', 'Корэ ва ра:мэн дэс — Это рамен', 'Корэ ва тэмпура дэс — Это темпура'] },
+        { q: 'О-сумэ ва нан дэсу ка? — Что вы рекомендуете?', answers: ['Суси га о-сумэ дэс — Рекомендую суши', 'Ра:мэн га нинки дэс — Рамен популярен', 'Кё: но супэсяру дэс — Сегодняшнее специальное'] },
+        { q: 'Корэ о кудасай — Дайте это, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Хитоцу дэсу ка? — Один?', 'Котира дэ о-мэсиагари дэсу ка? — Здесь будете есть?'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 17',
+    questions: [
+        { q: 'Сорэ о кудасай — Дайте то, пожалуйста.', answers: ['Хай, до:дзо — Да, пожалуйста', 'О-хитоцу дэсу ка? — Один?', 'Нани ни симас ка? — Что выберете?'] },
+        { q: 'Арэ о кудасай — Дайте вон то, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Арэ дэсу нэ — Вон то, да?', 'О-хитоцу дэ ёросий дэсу ка? — Один подойдёт?'] },
+        { q: 'Хитоцу кудасай — Один, пожалуйста.', answers: ['Хай, хитоцу дэсу нэ — Да, один, да?', 'Касикомаримасита — Понял', 'Хока ни наника? — Что-нибудь ещё?'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 18',
+    questions: [
+        { q: 'Футацу кудасай — Два, пожалуйста.', answers: ['Хай, футацу дэсу нэ — Да, два, да?', 'Касикомаримасита — Понял', 'Хока ни наника? — Что-нибудь ещё?'] },
+        { q: 'Митцу кудасай — Три, пожалуйста.', answers: ['Хай, митцу дэсу нэ — Да, три, да?', 'Касикомаримасита — Понял', 'Хока ни наника? — Что-нибудь ещё?'] },
+        { q: 'О-кайкэй о онэгайсимас — Счёт, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'О-кайкэй дэсу нэ — Счёт, да?', 'Ка:до то гэнкин дотира дэсу ка? — Картой или наличными?'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 19',
+    questions: [
+        { q: 'Мидзу о кудасай — Дайте воды, пожалуйста.', answers: ['Хай, до:дзо — Да, пожалуйста', 'Мидзу дэсу нэ — Вода, да?', 'Кори о ирэмас ка? — Добавить лёд?'] },
+        { q: 'Би:ру о кудасай — Дайте пива, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Би:ру дэсу нэ — Пиво, да?', 'Нани но би:ру га ии дэсу ка? — Какое пиво?'] },
+        { q: 'Отя о кудасай — Дайте чаю, пожалуйста.', answers: ['Хай, до:дзо — Да, пожалуйста', 'Отя дэсу нэ — Чай, да?', 'Хотто то айсу дотира дэсу ка? — Горячий или холодный?'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 20',
+    questions: [
+        { q: 'Ко:хи: о кудасай — Дайте кофе, пожалуйста.', answers: ['Хай, до:дзо — Да, пожалуйста', 'Ко:хи: дэсу нэ — Кофе, да?', 'Сато: то мируку ва? — Сахар и молоко?'] },
+        { q: 'Дзю:су о кудасай — Дайте сок, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Дзю:су дэсу нэ — Сок, да?', 'Орэндзи то аппуру дотира дэсу ка? — Апельсиновый или яблочный?'] },
+        { q: 'Ка:до дэ хараэмас ка? — Можно оплатить картой?', answers: ['Хай, ка:до дэ хараэмас — Да, можно картой', 'Ииэ, гэнкин номи дэс — Нет, только наличные', 'Ка:до то гэнкин дотира дэмо — Можно и картой, и наличными'] }
+    ]
+});
+phase2.push({ type: 'check', title: 'День 21 — ПРОВЕРКА', text: '10 случайных фраз из дней 15–20' });
+
+phase2.push({
+    type: 'lesson',
+    title: 'День 22',
+    questions: [
+        { q: 'Корэ ва ойсий дэсу ка? — Это вкусно?', answers: ['Хай, тотэмо ойсий дэс — Да, очень вкусно', 'Ииэ, ойсикунай дэс — Нет, невкусно', 'Тётто карай дэс — Немного острое'] },
+        { q: 'Коно рё:ри ва до: дэсу ка? — Как это блюдо?', answers: ['Тотэмо ойсий дэс — Очень вкусно', 'Тётто карай дэс — Немного острое', 'Ойсикунай дэс — Невкусно'] },
+        { q: 'Корэ ва карай дэсу ка? — Это острое?', answers: ['Хай, тотэмо карай дэс — Да, очень острое', 'Ииэ, каракунай дэс — Нет, не острое', 'Тётто карай дэс — Немного острое'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 23',
+    questions: [
+        { q: 'Каракунай моно ва аримас ка? — Есть что-то неострое?', answers: ['Хай, аримас — Да, есть', 'Котира ва каракунай дэс — Это не острое', 'Сукоси карай дэс — Немного острое'] },
+        { q: 'Ватаси ва арэруги: га аримас — У меня аллергия.', answers: ['Нани но арэруги: дэсу ка? — На что аллергия?', 'Ки о цукэмас — Будем осторожны', 'Коно рё:ри ва дайдзёбу дэс — Это блюдо безопасно'] },
+        { q: 'Нику о табэмасэн — Я не ем мясо.', answers: ['Бэдзитариан дэсу ка? — Вы вегетарианец?', 'Сакана ва дайдзёбу дэсу ка? — Рыбу можно?', 'Нику га най рё:ри мо аримас — Есть блюда без мяса'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 24',
+    questions: [
+        { q: 'Сакана о табэмасэн — Я не ем рыбу.', answers: ['Сакана нуки дэ онэгайсимас — Без рыбы, пожалуйста', 'Нику рё:ри ва икага дэсу ка? — Как насчёт мясного?', 'Котира но рё:ри ва сакана га хайттэ имасэн — В это блюдо не добавляют рыбу'] },
+        { q: 'Готисо:сама дэсита — Спасибо за еду.', answers: ['Мата о-коси кудасай — Приходите ещё', 'Аригато годзаимас — Спасибо', 'О-кути ни аимасита ка? — Вам понравилось?'] },
+        { q: 'Итадакимас — Приятного аппетита.', answers: ['До:дзо, мэсиагэрэ — Пожалуйста, кушайте', 'Ойисо: дэсу нэ — Выглядит вкусно', 'До:дзо — Пожалуйста'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 25',
+    questions: [
+        { q: 'Бэдзитариан но рё:ри ва аримас ка? — У вас есть вегетарианское?', answers: ['Хай, аримас — Да, есть', 'Котира ва ясай дакэ дэс — Здесь только овощи', 'То:фу рё:ри га аримас — Есть блюда с тофу'] },
+        { q: 'Ацуй моно о кудасай — Дайте горячее, пожалуйста.', answers: ['Су:пу ва икага дэсу ка? — Как насчёт супа?', 'Ацуй отя га ии дэсу ка? — Горячий чай подойдёт?', 'Ра:мэн га ацуй дэс — Рамен горячий'] },
+        { q: 'Цумэтай моно о кудасай — Дайте холодное, пожалуйста.', answers: ['Айсу ко:хи: ва икага дэсу ка? — Как насчёт холодного кофе?', 'Цумэтай би:ру о до:дзо — Холодное пиво, пожалуйста', 'Мидзу ни кори о ирэмас ка? — Добавить лёд в воду?'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 26',
+    questions: [
+        { q: 'Донокураи матимас ка? — Сколько ждать?', answers: ['Го-фун дэс — 5 минут', 'Дзюппун дэс — 10 минут', 'Мо: сугу дэс — Скоро'] },
+        { q: 'Корэ ва дзимото но рё:ри дэсу ка? — Это местная еда?', answers: ['Хай, дзимото но рё:ри дэс — Да, местная', 'Ииэ, тигаимас — Нет', 'Кё:то но мэйбуцу дэс — Это фирменное блюдо Киото'] },
+        { q: 'Итибан нинки но рё:ри ва нан дэсу ка? — Какая еда самая популярная?', answers: ['Суси дэс — Суши', 'Ра:мэн дэс — Рамен', 'Тэмпура дэс — Темпура'] }
+    ]
+});
+phase2.push({
+    type: 'lesson',
+    title: 'День 27',
+    questions: [
+        { q: 'О-тэарай ва доко дэсу ка? — Где туалет?', answers: ['Асоко дэс — Вон там', 'Никай дэс — На втором этаже', 'Миги ни аримас — Справа'] },
+        { q: 'Адзи ва до: дэсу ка? — Как на вкус?', answers: ['Тотэмо ойсий дэс — Очень вкусно', 'Тётто карай дэс — Немного острое', 'Амай дэс — Сладкое'] },
+        { q: 'Онака га иппай дэс — Я наелся.', answers: ['Ёкатта дэсу нэ — Хорошо', 'Мада наника табэмас ка? — Будете ещё что-то?', 'Дэдза:то ва икага дэсу ка? — Как насчёт десерта?'] }
+    ]
+});
+phase2.push({ type: 'check', title: 'День 28 — ПРОВЕРКА', text: '10 случайных фраз из дней 22–27' });
+
+// ---------- ФАЗА 3: БАР, ЗНАКОМСТВА, АПТЕКА, ПОТЕРЯ ВЕЩЕЙ, СВЯЗЬ, ОБМЕН ВАЛЮТЫ (дни 29-42) ----------
+const phase3 = [];
+
+phase3.push({
+    type: 'lesson',
+    title: 'День 29',
+    questions: [
+        { q: 'Ба: ва доко дэсу ка? — Где бар?', answers: ['Асоко ни аримас — Вон там', 'Иккай ни аримас — На первом этаже', 'Хидари ни аримас — Слева'] },
+        { q: 'Би:ру о кудасай — Дайте пива, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Нани но би:ру га ии дэсу ка? — Какое пиво?', 'Нама би:ру дэсу ка? — Пиво в кружке?'] },
+        { q: 'Нихонсю о кудасай — Дайте саке, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Нихонсю дэсу нэ — Саке, да?', 'Цумэтай но то ацуй но дотира дэсу ка? — Холодное или горячее?'] }
+    ]
+});
+phase3.push({
+    type: 'lesson',
+    title: 'День 30',
+    questions: [
+        { q: 'Вайн о кудасай — Дайте вина, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Ака вайн то сиро вайн дотира дэсу ка? — Красное или белое?', 'Вайн дэсу нэ — Вино, да?'] },
+        { q: 'Уисуки: о кудасай — Дайте виски, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Суторэ:то дэсу ка? — Чистое?', 'Рокку ка мидзувари дэсу ка? — Со льдом или с водой?'] },
+        { q: 'Мо: иппай кудасай — Ещё одну кружку, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Онадзи моно дэ ии дэсу ка? — То же самое?', 'Мо: иппай дэсу нэ — Ещё одну, да?'] }
+    ]
+});
+phase3.push({
+    type: 'lesson',
+    title: 'День 31',
+    questions: [
+        { q: 'О-кайкэй о онэгайсимас — Счёт, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'О-кайкэй дэсу нэ — Счёт, да?', 'Ка:до то гэнкин дотира дэсу ка? — Картой или наличными?'] },
+        { q: 'Ка:до дэ хараэмас ка? — Можно оплатить картой?', answers: ['Хай, ка:до дэ хараэмас — Да, можно картой', 'Ииэ, гэнкин номи дэс — Нет, только наличные', 'Дотира дэмо дайдзёбу дэс — Можно и так, и так'] },
+        { q: 'Конъя ва коко ва таносий дэсу ка? — Сегодня вечером здесь весело?', answers: ['Хай, тотэмо таносий дэс — Да, очень весело', 'Ииэ, сидзука дэс — Нет, тихо', 'Сю:мацу ва кондэ имас — По выходным людно'] }
+    ]
+});
+phase3.push({ type: 'check', title: 'День 32 — ПРОВЕРКА', text: '10 случайных фраз из дней 29–31' });
+
+phase3.push({
+    type: 'lesson',
+    title: 'День 33',
+    questions: [
+        { q: 'Онамаэ ва нан дэсу ка? — Как вас зовут?', answers: ['Ватаси но намаэ ва ... дэс — Меня зовут ...', '... дэс — ... (имя)', 'Аната ва? — А вас?'] },
+        { q: 'Доко кара кимасита ка? — Откуда вы приехали?', answers: ['Росиа кара кимасита — Из России', 'Бэрару:си кара кимасита — Из Беларуси', 'Амэрика кара кимасита — Из Америки'] },
+        { q: 'О-гэнки дэсу ка? — Как дела?', answers: ['Гэнки дэс — Хорошо', 'Маамаа дэс — Нормально', 'Тётто цукарэтэ имас — Немного устал'] }
+    ]
+});
+phase3.push({ type: 'check', title: 'День 34 — ПРОВЕРКА', text: '10 случайных фраз из дня 33' });
+
+phase3.push({
+    type: 'lesson',
+    title: 'День 35',
+    questions: [
+        { q: 'Яккёку ва доко дэсу ка? — Где аптека?', answers: ['Асоко ни аримас — Вон там', 'Миги ни аримас — Справа', 'Коно биру но иккай дэс — На первом этаже этого здания'] },
+        { q: 'Атама га итай дэс — У меня болит голова.', answers: ['Кусари о каимас ка? — Купить лекарство?', 'Яккёку ва асоко дэс — Аптека вон там', 'Дайдзёбу дэсу ка? — Всё в порядке?'] },
+        { q: 'Онака га итай дэс — У меня болит живот.', answers: ['Кусари о агэмас ка? — Дать лекарство?', 'Бёин ни икимас ка? — Пойти в больницу?', 'Дайдзёбу дэсу ка? — Всё в порядке?'] }
+    ]
+});
+phase3.push({ type: 'check', title: 'День 36 — ПРОВЕРКА', text: '10 случайных фраз из дня 35' });
+
+phase3.push({
+    type: 'lesson',
+    title: 'День 37',
+    questions: [
+        { q: 'Пасупо:то о накусимасита — Я потерял паспорт.', answers: ['Кэйсацу ни икимас ка? — Пойти в полицию?', 'Ицу накусимасита ка? — Когда потеряли?', 'Доко дэ накусимасита ка? — Где потеряли?'] },
+        { q: 'Кэйтай дэнгва о накусимасита — Я потерял телефон.', answers: ['Дэнва ситэ мимас ка? — Попробовать позвонить?', 'Мо: сугу ни сагасимас — Сейчас поищем', 'Хотэру ни оитэ кимасита ка? — Не оставили в отеле?'] },
+        { q: 'Сайфу о накусимасита — Я потерял кошелёк.', answers: ['Мицукэтара рэнраку симас — Если найдём, свяжемся', 'Кэйсацу ни рэнраку симас — Свяжусь с полицией', 'Сайфу но иро ва нан дэсу ка? — Какого цвета кошелёк?'] }
+    ]
+});
+phase3.push({ type: 'check', title: 'День 38 — ПРОВЕРКА', text: '10 случайных фраз из дня 37' });
+
+phase3.push({
+    type: 'lesson',
+    title: 'День 39',
+    questions: [
+        { q: 'Сим-ка:до ва доко дэ каэмас ка? — Где можно купить сим-карту?', answers: ['Конбини дэ каэмас — В магазине', 'Аннайдзё дэ каэмас — В справочной', 'Дэнкия дэ каэмас — В магазине электроники'] },
+        { q: 'Мобайру инта:нэт о цукаитай дэс — Я хочу пользоваться мобильным интернетом.', answers: ['Пурэ-пээдо симу га аримас — Есть предоплаченная сим-карта', 'Вай-фай рэнтару мо аримас — Есть аренда Wi-Fi', 'Доки доки га ии дэсу ка? — Какой тарифный план?'] },
+        { q: 'Вай-фай но пасува:до ва нан дэсу ка? — Какой пароль от Wi-Fi?', answers: ['Котира дэс — Вот', 'Хатисуба мару сан йон го дэс — 80345', 'Тэ-но-хира дэ о-сиэсимас — Я покажу на руке'] }
+    ]
+});
+phase3.push({ type: 'check', title: 'День 40 — ПРОВЕРКА', text: '10 случайных фраз из дня 39' });
+
+phase3.push({
+    type: 'lesson',
+    title: 'День 41',
+    questions: [
+        { q: 'Рё:гаэ-дзё ва доко дэсу ка? — Где обменник?', answers: ['Асоко ни аримас — Вон там', 'Гинко: но нака ни аримас — Внутри банка', 'Эки но нака ни аримас — Внутри вокзала'] },
+        { q: 'Долу о эн ни каэтай дэс — Я хочу поменять доллары на иены.', answers: ['Курс ва кё: доногурай дэсу ка? — Какой сегодня курс?', 'Конмиттэён о миттэ кудасай — Посмотрите комиссию', 'Го-ман эн мадэ каэмас — Можно обменять до 50000 иен'] },
+        { q: 'Эй-ти-эм-у ва доко ни аримас ка? — Где банкомат?', answers: ['Асоко ни аримас — Вон там', 'Гинко: но тон ари ни аримас — Рядом с банком', 'Конбини но нака ни мо аримас — Ещё внутри магазина'] }
+    ]
+});
+phase3.push({ type: 'check', title: 'День 42 — ПРОВЕРКА', text: '10 случайных фраз из дня 41' });
+
+// ---------- ФАЗА 4: ОТЕЛЬ И ТРАНСПОРТ (дни 43-56) ----------
+const phase4 = [];
+
+phase4.push({
+    type: 'lesson',
+    title: 'День 43',
+    questions: [
+        { q: 'Ёяку ситэ имас — У меня есть бронь.', answers: ['О-намаэ о каккунин симас — Проверю имя', 'Ёяку банго: ва аримас ка? — Есть номер брони?', 'Хай, касикомаримасита — Да, понял'] },
+        { q: 'Хэя о ёяку ситэ имас — Я забронировал номер.', answers: ['Нанпаку дэсу ка? — На сколько ночей?', 'Сингуру дэсу ка? — Односпальный?', 'Дабуру дэсу ка? — Двуспальный?'] },
+        { q: 'Чекку-ин о онэгайсимас — Регистрация, пожалуйста.', answers: ['Пасупо:то о кудасай — Дайте паспорт', 'Ёяку-мэй ва? — Имя брони?', 'Котира ни го-киню: кудасай — Заполните здесь'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 44',
+    questions: [
+        { q: 'Чекку-ауто ва нандзи дэсу ка? — Во сколько выезд?', answers: ['Дзю:дзи дэс — В 10 часов', 'Дзю:итидзи дэс — В 11 часов', 'Дзю:нидзи дэс — В 12 часов'] },
+        { q: 'Каги о кудасай — Дайте ключ, пожалуйста.', answers: ['Хай, до:дзо — Да, пожалуйста', 'Коко ни ка:до о татти ситэ кудасай — Приложите карту сюда', 'Сан-мару-ити госицу дэс — Комната 301'] },
+        { q: 'Нимоцу о адзукэтай дэс — Я хочу оставить багаж.', answers: ['Хай, касикомаримасита — Да, понял', 'Нандзи мадэ дэсу ка? — До скольки?', 'Котира ни ойтэ кудасай — Положите сюда'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 45',
+    questions: [
+        { q: 'Эа кон га коварэтэ имас — Кондиционер не работает.', answers: ['Сугу ни наосимас — Сейчас починим', 'Бэцу но хэя ни каваримас ка? — Переселить в другой номер?', 'Сумимасэн, сугу ни икимас — Извините, сейчас подойду'] },
+        { q: 'Вай-фай га аримасэн — Нет Wi-Fi.', answers: ['Пасува:до о осиэмас — Я скажу пароль', 'Котира га пасува:до дэс — Вот пароль', 'Ру:та: га косё: ситэ имас — Роутер сломался'] },
+        { q: 'Таору о кудасай — Дайте полотенце, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Нанмай дэсу ка? — Сколько?', 'Сугу ни моттэ икимас — Сейчас принесу'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 46',
+    questions: [
+        { q: 'Рэсуторан ва доко дэсу ка? — Где ресторан?', answers: ['Иккай ни аримас — На первом этаже', 'Асоко ни аримас — Вон там', 'Миги ни аримас — Справа'] },
+        { q: 'Тё:сёку ва цуйтэ имас ка? — Завтрак включён?', answers: ['Хай, цуйтэ имас — Да, включён', 'Ииэ, бэцурё:кин дэс — Нет, оплачивается отдельно', 'Тё:сёку ва ситидзи кара дэс — Завтрак с 7 часов'] },
+        { q: 'Тё:сёку ва нандзи кара дэсу ка? — Во сколько завтрак?', answers: ['Ситидзи кара дэс — С 7 часов', 'Рокудзи кара дэс — С 6 часов', 'Хатидзи кара дэс — С 8 часов'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 47',
+    questions: [
+        { q: 'Хэя о энтё: ситай дэс — Я хочу продлить номер.', answers: ['Нанпаку энтё: симас ка? — На сколько дней?', 'Аки га арэба кано: дэс — Если есть свободные номера', 'Иппаку цуйка дэсу нэ — Добавляем одну ночь, да?'] },
+        { q: 'Такусии нориба ва доко дэсу ка? — Где стоянка такси?', answers: ['Асоко ни аримас — Вон там', 'Сё:мэн ни аримас — Прямо перед вами', 'Хидари ни аримас — Слева'] },
+        { q: 'Такусии о ёндэ кудасай — Вызовите такси, пожалуйста.', answers: ['Хай, касикомаримасита — Да, понял', 'Сугу ни ёбимас — Сейчас вызову', 'Нанпун какаримас ка? — Сколько минут?'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 48',
+    questions: [
+        { q: 'Ку:ко: мадэ икура дэсу ка? — Сколько до аэропорта?', answers: ['Яку го-сэн эн дэс — Примерно 5000 иен', 'Сан-дзэн эн дэс — 3000 иен', 'Мэ:та: дэ кэйсан симас — По счётчику'] },
+        { q: 'Киппу уриба ва доко дэсу ка? — Где билетная касса?', answers: ['Асоко ни аримас — Вон там', 'Миги ни аримас — Справа', 'Никай ни аримас — На втором этаже'] },
+        { q: 'Кё:то мадэ но киппу о кудасай — Дайте билет до Киото.', answers: ['Катамити дэсу ка? — В одну сторону?', 'О:фуку дэсу ка? — Туда и обратно?', 'Ити-май дэ ёросий дэсу ка? — Один билет?'] }
+    ]
+});
+phase4.push({ type: 'check', title: 'День 49 — ПРОВЕРКА', text: '10 случайных фраз из дней 43–48' });
+
+phase4.push({
+    type: 'lesson',
+    title: 'День 50',
+    questions: [
+        { q: 'Катамити но киппу ва икура дэсу ка? — Сколько стоит билет в одну сторону?', answers: ['Го-хяку эн дэс — 500 иен', 'Сэн эн дэс — 1000 иен', 'Ни-сэн го-хяку эн дэс — 2500 иен'] },
+        { q: 'О:фуку но киппу о кудасай — Дайте билет туда и обратно.', answers: ['Хай, касикомаримасита — Да, понял', 'Ни-май дэсу нэ — Два билета, да?', 'Варибики га аримас — Есть скидка'] },
+        { q: 'Коно дэнся ва То:кё: ики дэсу ка? — Этот поезд идёт в Токио?', answers: ['Хай, то:кё: ики дэс — Да, в Токио', 'Ииэ, о:сака ики дэс — Нет, в Осаку', 'Кё:то ики дэс — В Киото'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 51',
+    questions: [
+        { q: 'Синкансэн но хо:му ва доко дэсу ка? — Где платформа Синкансэна?', answers: ['Асоко дэс — Вон там', 'Ни-бан хо:му дэс — Платформа №2', 'Миги ни аримас — Справа'] },
+        { q: 'Хася дзикан ва нандзи дэсу ка? — Во сколько отправление?', answers: ['Дзю:дзи дэс — В 10 часов', 'Дзю:итидзи хандзан дэс — В 11:30', 'Дзю:нидзи дэс — В 12 часов'] },
+        { q: 'То:тяку дзикан ва нандзи дэсу ка? — Во сколько прибытие?', answers: ['Дзю:ёдзи дэс — В 14:00', 'Дзю:годзи дэс — В 15:00', 'Дзю:рокудзи дэс — В 16:00'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 52',
+    questions: [
+        { q: 'Коно сэки ва айтэ имас ка? — Это место свободно?', answers: ['Хай, айтэ имас — Да, свободно', 'Ииэ, умэттэ имас — Нет, занято', 'Ситэйсэки дэс — Это место по билету'] },
+        { q: 'Коко ни суваттэ мо ии дэсу ка? — Можно сесть здесь?', answers: ['Хай, до:дзо — Да, пожалуйста', 'Ииэ, ёяку сэки дэс — Нет, это бронированное место', 'Сумимасэн, сэки га тоттэ аримас — Извините, место занято'] },
+        { q: 'Мадо гава га ии дэс — Я хочу у окна.', answers: ['Хай, до:дзо котира э — Да, сюда', 'Мадо гава ва аримасэн — У окна нет мест', 'Цу:ро гава ва икага дэсу ка? — Как насчёт места у прохода?'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 53',
+    questions: [
+        { q: 'Тойрэ ва коно дэнся ни аримас ка? — В этом поезде есть туалет?', answers: ['Хай, аримас — Да, есть', 'Ни-гося ни аримас — В вагоне №2', 'Ииэ, аримасэн — Нет, нету'] },
+        { q: 'Дэгути ва доко дэсу ка? — Где выход?', answers: ['Асоко дэс — Вон там', 'Хидари ни аримас — Слева', 'Массугу дэс — Прямо'] },
+        { q: 'Басу таминару ва доко дэсу ка? — Где автобусный терминал?', answers: ['Асоко ни аримас — Вон там', 'Эки но тон ари дэс — Рядом с вокзалом', 'Миги ни аримас — Справа'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 54',
+    questions: [
+        { q: 'Коно басу ва Кё:то ни икимас ка? — Этот автобус идёт в Киото?', answers: ['Хай, икимас — Да, идёт', 'Ииэ, икимасэн — Нет, не идёт', 'Кё:то-эки ики дэс — Идёт до вокзала Киото'] },
+        { q: 'Нанбансэн дэсу ка? — Это какой путь?', answers: ['Ити-бансэн дэс — Путь №1', 'Ни-бансэн дэс — Путь №2', 'Сан-бансэн дэс — Путь №3'] },
+        { q: 'Коно дэнся ва нанэки мадэ дэсу ка? — До какой станции идёт этот поезд?', answers: ['Кё:то мадэ дэс — До Киото', 'О:сака мадэ дэс — До Осаки', 'То:кё: мадэ дэс — До Токио'] }
+    ]
+});
+phase4.push({
+    type: 'lesson',
+    title: 'День 55',
+    questions: [
+        { q: 'Унтин ва икура дэсу ка? — Сколько стоит проезд?', answers: ['Ни-хяку эн дэс — 200 иен', 'Сан-бяку эн дэс — 300 иен', 'Го-хяку эн дэс — 500 иен'] },
+        { q: 'Киппу ва доко дэ каэмас ка? — Где можно купить билет?', answers: ['Дзидо: ханбайки дэ каэмас — Можно купить в автомате', 'Мадогути дэ каэмас — Можно купить в кассе', 'Асоко дэ каэмас — Можно купить там'] },
+        { q: 'Ай-си: ка:до ва цукаэмас ка? — Можно использовать IC-карту?', answers: ['Хай, цукаэмас — Да, можно', 'Ииэ, цукаэмасэн — Нет, нельзя', 'Гэнкин дакэ дэс — Только наличные'] }
+    ]
+});
+phase4.push({ type: 'check', title: 'День 56 — ПРОВЕРКА', text: '10 случайных фраз из дней 50–55' });
+
+// ---------- ФАЗА 5: МАГАЗИНЫ (дни 57-62) ----------
+const phase5 = [];
+
+phase5.push({
+    type: 'lesson',
+    title: 'День 57',
+    questions: [
+        { q: 'Корэ ва икура дэсу ка? — Сколько это стоит?', answers: ['Сэн эн дэс — 1000 иен', 'Ни-сэн го-хяку эн дэс — 2500 иен', 'Го-сэн эн дэс — 5000 иен'] },
+        { q: 'Корэ ва такай дэсу нэ — Это дорого.', answers: ['Такай дэсу ка? — Дорого?', 'Мотто ясуй но га аримас — Есть более дешёвое', 'Сумимасэн, такай дэсу нэ — Извините, дороговато'] },
+        { q: 'Корэ ва ясуй дэсу нэ — Это дёшево.', answers: ['Ясуй дэсу ё — Дёшево', 'Ии каим оно дэсу нэ — Хорошая покупка', 'Сэ:ру-тю: дэс — Сейчас распродажа'] }
+    ]
+});
+phase5.push({
+    type: 'lesson',
+    title: 'День 58',
+    questions: [
+        { q: 'Сайзу ва нан дэсу ка? — Какой размер?', answers: ['Эсу дэс — S', 'Эму дэс — M', 'Эру дэс — L'] },
+        { q: 'Эму сайзу ва аримас ка? — Есть размер M?', answers: ['Хай, аримас — Да, есть', 'Ииэ, аримасэн — Нет, нету', 'Эру сайзу ва икага дэсу ка? — Как насчёт размера L?'] },
+        { q: 'Иро ва нани-иро дэсу ка? — Какого цвета?', answers: ['Куро дэс — Чёрный', 'Сиро дэс — Белый', 'Ака дэс — Красный'] }
+    ]
+});
+phase5.push({
+    type: 'lesson',
+    title: 'День 59',
+    questions: [
+        { q: 'Куро ва аримас ка? — Есть чёрный?', answers: ['Хай, аримас — Да, есть', 'Ииэ, аримасэн — Нет, нету', 'Сиро ва икага дэсу ка? — Как насчёт белого?'] },
+        { q: 'Ао ва аримас ка? — Есть синий?', answers: ['Хай, аримас — Да, есть', 'Ииэ, аримасэн — Нет, нету', 'Мидори ва икага дэсу ка? — Как насчёт зелёного?'] },
+        { q: 'Рэдзи ва доко дэсу ка? — Где касса?', answers: ['Асоко дэс — Вон там', 'Миги ни аримас — Справа', 'Сё:мэн дэс — Прямо перед вами'] }
+    ]
+});
+phase5.push({
+    type: 'lesson',
+    title: 'День 60',
+    questions: [
+        { q: 'Ка:до дэ хараэмас ка? — Можно оплатить картой?', answers: ['Хай, ка:до дэ хараэмас — Да, можно картой', 'Ииэ, гэнкин номи дэс — Нет, только наличные', 'Дотира дэмо дайдзёбу дэс — Можно и так, и так'] },
+        { q: 'Гэнкин сика аримасэн — У меня только наличные.', answers: ['Дайдзёбу дэс — Хорошо', 'Гэнкин дэ онэгайсимас — Наличными, пожалуйста', 'Рё:гайки га аримас — Есть обменник'] },
+        { q: 'Мо: сукоси ясуй но ва аримас ка? — Есть что-то дешевле?', answers: ['Хай, аримас — Да, есть', 'Ииэ, корэ га итибан ясуй дэс — Нет, это самое дешёвое', 'Котира ва икага дэсу ка? — Как насчёт этого?'] }
+    ]
+});
+phase5.push({ type: 'check', title: 'День 61 — ПРОВЕРКА', text: '10 случайных фраз из дней 57–60' });
+
+phase5.push({
+    type: 'lesson',
+    title: 'День 62',
+    questions: [
+        { q: 'Коно сина ва хокуро дэсу ка? — Это местное производство?', answers: ['Хай, нихон сэй дэс — Да, японское', 'Ииэ, ю:ню: дэс — Нет, импортное', 'Коно сина ва нихон сэй дэс — Это японское производство'] },
+        { q: 'Мотто оокий сайзу ва аримас ка? — Есть размер побольше?', answers: ['Хай, аримас — Да, есть', 'Ииэ, корэ га сайдай дэс — Нет, это максимальный размер', 'Мотто тиисай но ва икага дэсу ка? — Как насчёт поменьше?'] },
+        { q: 'Хока но иро ва аримас ка? — Есть другие цвета?', answers: ['Хай, аримас — Да, есть', 'Ииэ, коно иро дакэ дэс — Нет, только этот цвет', 'Кочира о го-ран кудасай — Посмотрите сюда'] }
+    ]
+});
+phase5.push({ type: 'check', title: 'День 63 — ПРОВЕРКА', text: '10 случайных фраз из дня 62' });
+
+// ---------- ФАЗА 6: ОТЕЛЬ, ГОРОД, РЕСТОРАН, ПОЛЕЗНОЕ (дни 64-71) ----------
+const phase6 = [];
+
+phase6.push({
+    type: 'lesson',
+    title: 'День 64',
+    questions: [
+        { q: 'Хэя но банго: ва нан дэсу ка? — Какой номер комнаты?', answers: ['Ни-сан-ити госицу дэс — 231', 'Сан-го-ро госицу дэс — 356', 'Ити-хати-ни госицу дэс — 182'] },
+        { q: 'Эа кон но цукайката о осиэтэ кудасай — Объясните, как пользоваться кондиционером', answers: ['Коно римо:кон о цукаттэ кудасай — Используйте этот пульт', 'Ацуй то самуй га сэттэй дэкимас — Можно настроить тепло и холод', 'Ондо о сэттэй ситэ кудасай — Установите температуру'] },
+        { q: 'Асагохан ва нандзи кара дэсу ка? — Во сколько завтрак?', answers: ['Ситидзи кара дэс — С 7 часов', 'Рокудзи кара дэс — С 6 часов', 'Хатидзи кара дэс — С 8 часов'] }
+    ]
+});
+phase6.push({
+    type: 'lesson',
+    title: 'День 65',
+    questions: [
+        { q: 'Чекку-ауто о симас — Я выезжаю.', answers: ['Хай, касикомаримасита — Да, понял', 'Нимоцу ва аримас ка? — Есть багаж?', 'Го-риё: аригато годзаимасита — Спасибо за проживание'] },
+        { q: 'Нимоцу о адзукэтэ мо ии дэсу ка? — Можно оставить багаж?', answers: ['Хай, дайдзёбу дэс — Да, можно', 'Итидзи мадэ дэсу ка? — До часу?', 'Котира ни ойтэ кудасай — Положите сюда'] },
+        { q: 'Такусии о ёндэ кудасай — Вызовите такси.', answers: ['Хай, сугу ни ёбимас — Да, сейчас вызову', 'Икура гурай дэсу ка? — Примерно сколько?', 'Доко мадэ икимас ка? — Куда едем?'] }
+    ]
+});
+phase6.push({ type: 'check', title: 'День 66 — ПРОВЕРКА', text: '10 случайных фраз из дней 64–65' });
+
+phase6.push({
+    type: 'lesson',
+    title: 'День 67',
+    questions: [
+        { q: 'Сумимасэн, мити о осиэтэ кудасай — Извините, подскажите дорогу.', answers: ['Массугу иттэ кудасай — Идите прямо', 'Миги ни магаттэ кудасай — Поверните направо', 'Коно мити о иттэ кудасай — Идите по этой дороге'] },
+        { q: 'Коно тикаку ни тоирэ ва аримас ка? — Рядом есть туалет?', answers: ['Хай, аримас — Да, есть', 'Асоко ни аримас — Вон там', 'Коно биру но иккай дэс — На первом этаже этого здания'] },
+        { q: 'Конбини ва доко дэсу ка? — Где магазин?', answers: ['Асоко ни аримас — Вон там', 'Миги ни аримас — Справа', 'Хидари ни аримас — Слева'] }
+    ]
+});
+phase6.push({
+    type: 'lesson',
+    title: 'День 68',
+    questions: [
+        { q: 'Эки мадэ доно курай какаримас ка? — Сколько до вокзала?', answers: ['Го-фун дэс — 5 минут', 'Дзюппун дэс — 10 минут', 'Ни-дзюппун дэс — 20 минут'] },
+        { q: 'Ку:ко: э но басу ва доко кара норимас ка? — Откуда автобус до аэропорта?', answers: ['Асоко кара дэс — Оттуда', 'Эки но маэ кара дэс — От вокзала', 'Коно то мэ но маэ кара дэс — От этого здания'] },
+        { q: 'Коно тикаку ни о-тэра ва аримас ка? — Рядом есть храм?', answers: ['Хай, аримас — Да, есть', 'Асоко ни аримас — Вон там', 'Миги ни магаттэ сугу дэс — Направо и сразу'] }
+    ]
+});
+phase6.push({ type: 'check', title: 'День 69 — ПРОВЕРКА', text: '10 случайных фраз из дней 67–68' });
+
+phase6.push({
+    type: 'lesson',
+    title: 'День 70',
+    questions: [
+        { q: 'Сумимасэн, мэнью: о кудасай — Извините, дайте меню.', answers: ['Хай, до:дзо — Да, пожалуйста', 'Котира дэс — Вот', 'Нани о табэтай дэсу ка? — Что хотите поесть?'] },
+        { q: 'Коно рё:ри ни ва нани га хайттэ имас ка? — Что входит в это блюдо?', answers: ['Нику то ясай дэс — Мясо и овощи', 'Сакана то гохан дэс — Рыба и рис', 'Тамаго то ясай дэс — Яйца и овощи'] },
+        { q: 'Мо: иппай би:ру о кудасай — Ещё одно пиво.', answers: ['Хай, касикомаримасита — Да, понял', 'Онадзи би:ру дэ ии дэсу ка? — То же пиво?', 'Хока но би:ру ва икага дэсу ка? — Как насчёт другого пива?'] }
+    ]
+});
+phase6.push({ type: 'check', title: 'День 71 — ПРОВЕРКА', text: '10 случайных фраз из дня 70' });
+
+// ---------- ФАЗА 7: ЭКЗАМЕНЫ (дни 72-74) ----------
+const phase7 = [];
+
+phase7.push({ type: 'check', title: 'День 72 — ПРОВЕРКА', text: '10 случайных фраз из дней 64–71' });
+phase7.push({ type: 'check', title: 'День 73 — ПРОВЕРКА', text: '10 случайных фраз из всех фаз' });
+phase7.push({ type: 'exam', title: 'День 74 — ЭКЗАМЕН 3', text: '30 случайных фраз из всего курса' });
+
+// ============================================================
+// СБОРКА ВЕРСИЙ
+// ============================================================
+
+courseData.min = [
+    ...phase1.slice(0, 7),
+    ...phase2.slice(0, 7),
+    ...phase3.slice(0, 7)
+];
+
+courseData.medium = [
+    ...phase1.slice(0, 14),
+    ...phase2.slice(0, 14),
+    ...phase3.slice(0, 14)
+];
+
+courseData.full = [
+    ...phase1,
+    ...phase2,
+    ...phase3,
+    ...phase4,
+    ...phase5,
+    ...phase6,
+    ...phase7
+];
+
+// ============================================================
+// ТЕМЫ ДЛЯ КАЖДОЙ ВЕРСИИ
+// ============================================================
+
+const topicsData = {
+    min: {
+        'Дорога': { start: 0, end: 7 },
+        'Еда': { start: 7, end: 14 },
+        'Бар': { start: 14, end: 21 }
+    },
+    medium: {
+        'Дорога': { start: 0, end: 14 },
+        'Еда': { start: 14, end: 28 },
+        'Бар и знакомства': { start: 28, end: 42 }
+    },
+    full: {
+        'Дорога': { start: 0, end: 14 },
+        'Еда': { start: 14, end: 28 },
+        'Бар, знакомства, аптека, потеря вещей, связь, обмен валюты': { start: 28, end: 42 },
+        'Отель и транспорт': { start: 42, end: 56 },
+        'Магазины': { start: 56, end: 63 },
+        'Отель, город, ресторан, полезное': { start: 63, end: 74 }
+    }
+};
+
+// ============================================================
+// ДВИЖОК
+// ============================================================
+
+let currentVersion = 'min';
+let currentTopic = null;
+let currentDayIndex = 0;
+let openedAnswers = {};
+let doneDays = new Set();
+
+const progressStore = {
+    min: { done: new Set(), opened: {} },
+    medium: { done: new Set(), opened: {} },
+    full: { done: new Set(), opened: {} }
+};
+
+function getTopicsForVersion(version) {
+    return topicsData[version] || {};
+}
+
+function isSpecialMode() {
+    return currentVersion === 'numbers' || currentVersion === 'emergency';
+}
+
+function renderTopicSelector() {
+    const container = document.getElementById('topicSelector');
+    if (!container) return;
+    
+    if (isSpecialMode()) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    const topics = getTopicsForVersion(currentVersion);
+    const topicNames = Object.keys(topics);
+    
+    if (topicNames.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    if (!currentTopic || !topics[currentTopic]) {
+        currentTopic = topicNames[0];
+    }
+    
+    let html = '';
+    topicNames.forEach(name => {
+        const isActive = name === currentTopic ? ' active' : '';
+        html += `<button class="topic-btn${isActive}" data-topic="${name}">${name}</button>`;
+    });
+    container.innerHTML = html;
+    
+    container.querySelectorAll('.topic-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            currentTopic = this.dataset.topic;
+            const topics = getTopicsForVersion(currentVersion);
+            const range = topics[currentTopic];
+            if (range) {
+                currentDayIndex = range.start;
+            }
+            render();
+        });
+    });
+}
+
+function renderDayNav() {
+    const nav = document.getElementById('dayNav');
+    if (!nav) return;
+    
+    if (isSpecialMode()) {
+        nav.classList.add('hidden');
+        return;
+    }
+    nav.classList.remove('hidden');
+    
+    const topics = getTopicsForVersion(currentVersion);
+    if (!currentTopic || !topics[currentTopic]) {
+        nav.innerHTML = '';
+        return;
+    }
+    
+    const range = topics[currentTopic];
+    const days = courseData[currentVersion];
+    const topicDays = days.slice(range.start, range.end);
+    
+    nav.innerHTML = '';
+    topicDays.forEach((day, idx) => {
+        const globalIdx = range.start + idx;
+        const btn = document.createElement('button');
+        btn.className = 'day-btn' + (globalIdx === currentDayIndex ? ' active' : '') + (doneDays.has(globalIdx) ? ' done' : '');
+        btn.textContent = globalIdx + 1;
+        btn.addEventListener('click', () => { currentDayIndex = globalIdx; render(); });
+        nav.appendChild(btn);
+    });
+}
+
+function renderDayContent() {
+    const days = courseData[currentVersion];
+    const day = days[currentDayIndex];
+    const container = document.getElementById('courseContent');
+    if (!container) return;
+    if (!day) { container.innerHTML = '<div class="empty-block">День не найден</div>'; return; }
+
+    let html = `<div style="margin-bottom:8px; font-weight:600; color:#f5c542;">${day.title}</div>`;
+
+    if (day.type === 'lesson') {
+        day.questions.forEach((q, qi) => {
+            const key = `${currentVersion}_${currentDayIndex}_${qi}`;
+            const isOpen = openedAnswers[key] || false;
+            html += `<div class="q-item" data-key="${key}">
+                        <span class="toggle ${isOpen ? 'open' : ''}">${isOpen ? '−' : '+'}</span>
+                        ${q.q}
+                     </div>`;
+            html += `<div class="answers ${isOpen ? 'open' : ''}">`;
+            q.answers.forEach(a => {
+                html += `<div class="ans">• ${a}</div>`;
+            });
+            html += `</div>`;
+        });
+    } else if (day.type === 'check') {
+        html += `<div class="check-block">${day.text}</div>`;
+    } else if (day.type === 'exam') {
+        html += `<div class="exam-block">${day.text}</div>`;
+    }
+
+    container.innerHTML = html;
+
+    document.querySelectorAll('.q-item').forEach(el => {
+        el.addEventListener('click', function() {
+            const key = this.dataset.key;
+            if (!key) return;
+            openedAnswers[key] = !openedAnswers[key];
+            if (openedAnswers[key]) {
+                const parts = key.split('_');
+                if (parts.length >= 2) {
+                    const dayIdx = parseInt(parts[1]);
+                    if (!isNaN(dayIdx)) {
+                        doneDays.add(dayIdx);
+                    }
+                }
+            }
+            saveProgress();
+            render();
+        });
+    });
+}
+
+function renderProgress() {
+    const days = courseData[currentVersion] || [];
+    const total = days.length;
+    const done = doneDays.size;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    const fill = document.getElementById('progressFill');
+    if (fill) {
+        fill.style.width = pct + '%';
+        fill.textContent = pct + '%';
+    }
+
+    let phrases = 0, answers = 0;
+    days.forEach(d => {
+        if (d.type === 'lesson') {
+            phrases += d.questions.length;
+            d.questions.forEach(q => answers += q.answers.length);
+        }
+    });
+    const totalPhrases = document.getElementById('totalPhrases');
+    const totalDays = document.getElementById('totalDays');
+    const totalAnswers = document.getElementById('totalAnswers');
+    if (totalPhrases) totalPhrases.textContent = phrases;
+    if (totalDays) totalDays.textContent = days.length;
+    if (totalAnswers) totalAnswers.textContent = answers;
+    
+    const footerStats = document.getElementById('footerStats');
+    if (footerStats) {
+        footerStats.textContent = 
+            `${currentVersion.toUpperCase()} · ${days.length} дней · ${phrases} фраз · ${answers} ответов`;
+    }
+}
+
+function saveProgress() {
+    progressStore[currentVersion] = {
+        done: new Set(doneDays),
+        opened: { ...openedAnswers }
+    };
+    try {
+        const data = {
+            done: Array.from(doneDays),
+            opened: openedAnswers,
+            version: currentVersion,
+            dayIndex: currentDayIndex,
+            topic: currentTopic
+        };
+        localStorage.setItem('japanese_progress_' + currentVersion, JSON.stringify(data));
+    } catch(e) {}
+}
+
+function loadProgress(version) {
+    try {
+        const raw = localStorage.getItem('japanese_progress_' + version);
+        if (raw) {
+            const data = JSON.parse(raw);
+            doneDays = new Set(data.done || []);
+            openedAnswers = data.opened || {};
+            if (data.dayIndex !== undefined) {
+                currentDayIndex = data.dayIndex;
+            }
+            if (data.topic) {
+                currentTopic = data.topic;
+            }
+            progressStore[version] = {
+                done: new Set(doneDays),
+                opened: { ...openedAnswers }
+            };
+        }
+    } catch(e) {}
+}
+
+function renderSpecial(version) {
+    const container = document.getElementById('courseContent');
+    if (!container) return;
+    
+    const infoLine = document.querySelector('.info-line');
+    const progressBar = document.querySelector('.progress-bar');
+    const dayNav = document.getElementById('dayNav');
+    const topicSelector = document.getElementById('topicSelector');
+    
+    if (infoLine) infoLine.style.display = 'none';
+    if (progressBar) progressBar.style.display = 'none';
+    if (dayNav) dayNav.classList.add('hidden');
+    if (topicSelector) topicSelector.innerHTML = '';
+    
+    if (version === 'numbers') {
+        container.innerHTML = `
+            <div class="side-card">
+                <h3>🔢 Числа</h3>
+                <div class="item"><strong>Цифры:</strong> 1 — ити, 2 — ни, 3 — сан, 4 — ён, 5 — го, 6 — року, 7 — нана, 8 — хати, 9 — кю:, 10 — дзю:</div>
+                <div class="item"><strong>Десятки:</strong> 20 — нидзю:, 30 — сандзю:, 40 — ёндзю:, 50 — годзю:, 60 — рокудзю:, 70 — нанадзю:, 80 — хатидзю:, 90 — кю:дзю:</div>
+                <div class="item"><strong>Сотни:</strong> 100 — хяку, 200 — нихяку, 300 — санбяку, 400 — ёнхяку, 500 — гохяку, 600 — роппяку, 700 — нанахяку, 800 — хаппяку, 900 — кю:хяку</div>
+                <div class="item"><strong>Тысячи:</strong> 1000 — сэн, 2000 — нисэн, 3000 — сандзэн, 4000 — ёнсэн, 5000 — госэн, 6000 — рокусэн, 7000 — нанасэн, 8000 — хассэн, 9000 — кю:сэн</div>
+                <div class="item"><strong>10 000:</strong> ити-ман</div>
+                <div class="item"><strong>Смешанные:</strong> 21 — нидзю: ити, 35 — сандзю: го, 48 — ёндзю: хати, 52 — годзю: ни, 67 — рокудзю: нана, 83 — хатидзю: сан, 96 — кю:дзю: року</div>
+                <div class="item"><strong>Бутылки (пиво, саке):</strong> 1 — иппон, 2 — нихон, 3 — самбон, 4 — ёнхон</div>
+                <div class="item"><strong>Бокалы/кружки (коктейль, пиво):</strong> 1 — иппай, 2 — нихай, 3 — самбай, 4 — ёнхай</div>
+                <div class="item"><strong>Универсальный счётчик (штуки):</strong> 1 — хитоцу, 2 — футацу, 3 — митцу, 4 — ётцу</div>
+                <div class="item"><strong>Деньги:</strong> 10 иен — дзю:эн, 100 — хякуэн, 1000 — сэнэн, 10 000 — итиманэн</div>
+                <div class="item"><strong>Примеры:</strong><br>
+                    Бутылка пива, пожалуйста — Би:ру о иппон кудасай.<br>
+                    Две бутылки пива — Би:ру о нихон кудасай.<br>
+                    Три бокала вина — Вайн о самбай кудасай.<br>
+                    Четыре коктейля — Кокутэйру о ёнхай кудасай.<br>
+                    Одно саке — Сакэ о хитоцу кудасай.<br>
+                    Два виски — Уисуки: о футацу кудасай.<br>
+                    Сколько стоит? — Икура дэсу ка?<br>
+                    1000 иен — Сэн эн дэс.<br>
+                    21 иена — Нидзю: ити эн.
+                </div>
+            </div>
+        `;
+    } else if (version === 'emergency') {
+        container.innerHTML = `
+            <div class="side-card">
+                <h3>🚨 Экстренное</h3>
+                <div class="item">Тасукэтэ кудасай — Помогите.</div>
+                <div class="item">Кэйсацу о ёндэ кудасай — Вызовите полицию.</div>
+                <div class="item">Кю:кю:ся о ёндэ кудасай — Вызовите скорую.</div>
+                <div class="item">Бёин ва доко дэсу ка? — Где больница?</div>
+                <div class="item">Яккёку ва доко дэсу ка? — Где аптека?</div>
+                <div class="item">Дайдзёбу дэсу ка? — Всё в порядке?</div>
+                <div class="item">Ватаси ва мити ни маёимасита — Я заблудился.</div>
+                <div class="item">Хитодэси ва аримас ка? — Кто-нибудь есть?</div>
+                <div class="item">Кадзани наримасита — Я простудился.</div>
+                <div class="item">Кэга о симасита — Я поранился.</div>
+            </div>
+        `;
+    }
+    
+    document.querySelectorAll('.version-btn').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.version-btn[data-version="${version}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+}
+
+function switchVersion(v) {
+    if (v === 'numbers' || v === 'emergency') {
+        currentVersion = v;
+        renderSpecial(v);
+        return;
+    }
+    
+    saveProgress();
+    currentVersion = v;
+    loadProgress(v);
+    
+    const topics = getTopicsForVersion(v);
+    const topicNames = Object.keys(topics);
+    if (topicNames.length > 0) {
+        if (!currentTopic || !topics[currentTopic]) {
+            currentTopic = topicNames[0];
+        }
+        const range = topics[currentTopic];
+        if (currentDayIndex < range.start || currentDayIndex >= range.end) {
+            currentDayIndex = range.start;
+        }
+    } else {
+        currentDayIndex = 0;
+    }
+    
+    const infoLine = document.querySelector('.info-line');
+    const progressBar = document.querySelector('.progress-bar');
+    if (infoLine) infoLine.style.display = 'flex';
+    if (progressBar) progressBar.style.display = 'block';
+    
+    render();
+}
+
+function render() {
+    if (isSpecialMode()) {
+        renderSpecial(currentVersion);
+        return;
+    }
+    
+    renderVersionButtons();
+    renderTopicSelector();
+    renderDayNav();
+    renderDayContent();
+    renderProgress();
+    
+    const infoLine = document.querySelector('.info-line');
+    const progressBar = document.querySelector('.progress-bar');
+    if (infoLine) infoLine.style.display = 'flex';
+    if (progressBar) progressBar.style.display = 'block';
+}
+
+function renderVersionButtons() {
+    document.querySelectorAll('.version-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.version === currentVersion);
+    });
+}
+
+// ===== ПЕРЕКЛЮЧЕНИЕ ВЕРСИЙ =====
+document.querySelectorAll('.version-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        switchVersion(this.dataset.version);
+    });
+});
+
+document.getElementById('resetProgress').addEventListener('click', function() {
+    if (confirm('Сбросить весь прогресс для версии ' + currentVersion.toUpperCase() + '?')) {
+        doneDays.clear();
+        openedAnswers = {};
+        progressStore[currentVersion] = { done: new Set(), opened: {} };
+        localStorage.removeItem('japanese_progress_' + currentVersion);
+        
+        const topics = getTopicsForVersion(currentVersion);
+        const topicNames = Object.keys(topics);
+        if (topicNames.length > 0) {
+            currentTopic = topicNames[0];
+            const range = topics[currentTopic];
+            if (range) {
+                currentDayIndex = range.start;
+            }
+        } else {
+            currentDayIndex = 0;
+        }
+        render();
+    }
+});
+
+// ===== ВЕРХНИЕ ВКЛАДКИ =====
+document.querySelectorAll('.top-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        document.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        const target = document.getElementById(this.dataset.tab);
+        if (target) target.classList.add('active');
+    });
+});
+
+// ============================================================
+// ПЛАН ПОЕЗДКИ — РЕДАКТИРУЕМЫЙ (один textarea на день)
+// ============================================================
+
+const defaultPlanTexts = [
+    `=== ДЕНЬ 1 — ОСАКА (ПРИЛЁТ) ===
+
+🔵 13:00 — Прилёт в KIX
+Паспортный контроль, багаж, таможня.
+⚠️ В очереди можно стоять до 30 минут.
+💡 Не бери тележку — их мало, кати чемодан сам.
+
+🔵 13:45 — Nankai Line до Намбы
+Билет ¥930 ($6) в автомате на английском.
+💡 НЕ бери Rapi:t — дороже, быстрее всего на 10 минут.
+⚠️ Следи за остановкой — тебе "Namba", не "Shin-Imamiya".
+Выходи через "South Exit" — ближе к отелям.
+
+🔵 14:30 — Прибытие в Намбу
+Пешком до отеля 5–10 минут.
+
+🔵 14:45 — Заселение в отель
+Паспорт на ресепшн. Если номер не готов — оставить багаж (бесплатно).
+
+🔵 15:15 — Купить ICOCA
+¥500 депозит + пополнить на ¥7500 ($50).
+Покрывает: метро, автобусы, JR (кроме синкансэна).
+Можно платить в комбини (7-Eleven, FamilyMart, Lawson).
+⚠️ Если потеряешь — деньги не вернут.
+
+🔵 18:30 — Dotonbori
+Неон включается в 17:30. Лучшее время — сумерки.
+Такояки ¥600 за 6 шт. Кусикацу в Daruma — ¥1800.
+Фото с Glico Man на мосту Эбису.
+
+🔵 21:30 — Бары или караоке
+Хайболл ¥600. Big Echo караоке — ¥1500–2000/час.
+
+🔵 00:00 — Ночной рамен Ichiran
+¥1200–1500. Будка, автомат, никого не видно. 24/7.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💬 ЧЕСТНЫЕ ПРЕДУПРЕЖДЕНИЯ ДЛЯ ДНЯ 1:
+• В аэропорту после паспортного контроля очередь до 30 мин.
+• Автоматы с билетами НЕ берут карты РФ — только наличные.
+• В Японии НЕ принято давать чаевые.
+• Метро работает до полуночи. После 00:00 — пешком или такси.`,
+
+    `=== ДЕНЬ 2 — ОСАКА (DEN DEN TOWN) ===
+
+🔵 9:30 — Завтрак в комбини
+Онигири ¥150, яйцо ¥100, кофе ¥150. Итого ¥600–800.
+
+🔵 10:00 — Nipponbashi (Den Den Town)
+Аниме-квартал. Магазины открываются в 10:00.
+
+🔵 10:15 — Super Kids Land
+5 этажей фигурок. Nendoroid ¥4000–7000. Scale Figures ¥8000–20000.
+
+🔵 11:30 — Mandarake
+Букинистическая манга и фигурки. Цены ниже, чем в Super Kids Land.
+Состояние на ценнике: A (отличное) — B (хорошее) — C (царапины).
+
+🔵 12:30 — Joshin
+Электроника, аниме-мерч, ретро-игры.
+Картриджи для Famicom/Super Famicom — ¥500–1000.
+
+🔵 13:30 — Обед
+Рамэн ¥1000–1200. Удон ¥800–1000. Кацудон ¥1200.
+
+🔵 15:00 — Амиюзмент BIG (аркады)
+¥500 за 5 токенов. Street Fighter, Dance Dance Revolution, кран-машины.
+
+🔵 16:30 — Sennichimae Doguyasuji (улица ножей)
+Японские ножи от ¥5000. Работает до 18:00.
+⚠️ Ножи ТОЛЬКО в регистрируемый багаж! В ручную кладь нельзя.
+
+🔵 19:30 — Ужин: сукияки или шабу-шабу
+Сет от ¥3000. Вагью ¥8000+.
+Мясо варишь сам на столе. Макаешь в сырое яйцо (сукияки) или соусы (шабу-шабу).
+
+🔵 22:00 — Караоке (опционально)
+Big Echo — ¥1500–2000/час. Аниме-песни в каталоге.`,
+
+    `=== ДЕНЬ 3 — ОСАКА (KAIYUKAN + KUROMON) ===
+
+🔵 9:30 — Метро до Kaiyukan
+Линия Chuo до Osakako. ¥300, 20 минут.
+
+🔵 10:00 — Kaiyukan (аквариум)
+¥3700 ($25). Китовая акула, медузы, скаты.
+Вся экскурсия — 2–3 часа.
+
+🔵 13:00 — Обед в Tempozan Marketplace
+Курица карааге ¥1500 или пицца ¥1200–1500.
+
+🔵 14:30 — Возврат в Namba
+Метро Chuo до Namba, ¥300, 20 минут.
+
+🔵 15:30 — Kuromon Market
+Рынок морепродуктов.
+⚠️ РАБОТАЕТ ДО 17:00! Не опаздывай.
+💳 Наличные — карты не везде принимают.
+Что брать: устрицы ¥300–500, тунец о-торо ¥1000–1500, вагью на гриле ¥1500.
+
+🔵 17:30 — Den Den Town (добить)
+Animate (официальный мерч), Surugaya (фигурки, винил).
+Закрываются в 19:00–20:00.
+
+🔵 20:00 — Ужин: якитори
+Ассорти из 5–6 палочек — ¥2500–3000.
+Пиво ¥600. Хайболл ¥600.`,
+
+    `=== ДЕНЬ 4 — ОСАКА → КИОТО (НАРА + PONTOCHO) ===
+
+🔵 9:30 — Выход, завтрак в комбини
+Онигири, яйцо, кофе. ¥600–800.
+
+🔵 10:30 — JR Rapid Осака → Киото
+¥600 ($4), 30 минут.
+Выход на станции Киото.
+
+🔵 11:30 — Заселение в рёкан (Gion/Higashiyama)
+Такси от вокзала ¥1500–2000 или метро до Gion-Shijo.
+Оставить вещи на ресепшн.
+
+🔵 12:00 — JR Rapid Киото → Нара
+¥800, 45 минут.
+Садись справа по ходу — через полчаса будут видны горы.
+
+🔵 13:00 — Тодай-дзи (гигантский Будда)
+¥1200. 15-метровая бронзовая статуя.
+В колонне слева — отверстие размером с ноздрю Будды (говорят, кто пролезет — получит просветление).
+
+🔵 14:30 — Парк оленей
+Крекеры для оленей ¥200 за пачку.
+Олени кланяются. Если не дашь — могут укусить за сумку. Спрячь крекеры.
+
+🔵 16:00 — Обед в Наре
+Кушикацу ¥1500 или какиноха-дзуси (суши в листе хурмы) ¥1800.
+
+🔵 17:30 — Возврат в Киото
+JR Rapid Нара → Киото, ¥800, 45 минут.
+
+🔵 19:00 — Pontocho Alley
+Узкий переулок над рекой Камо.
+Фото в 19:30 — уже темно, горят фонари.
+
+🔵 20:30 — Ужин: изакая в Каварамати
+Карааге ¥800, якитори ¥600, пиво ¥600. Итого ¥3000–4000.`,
+
+    `=== ДЕНЬ 5 — КИОТО (FUSHIMI INARI, KIYOMIZU, GION) ===
+
+🔵 9:00 — Завтрак в рёкане
+Традиционный японский завтрак — рыба, рис, мисо-суп.
+
+🔵 10:30 — Fushimi Inari
+JR Nara Line до станции Inari, ¥150. Вход бесплатный.
+💡 Иди вверх 15–20 минут — толпа исчезает на 90%.
+
+🔵 12:30 — Обед
+Удон или соба. ¥1000–1200.
+
+🔵 14:30 — Kiyomizu-dera
+Автобус 206 до Kiyomizu-michi (¥230). Вход ¥500.
+Деревянная терраса на 12-метровых сваях. Вид на город.
+Под храмом — водопад Отова (три струи на удачу, успехи, любовь).
+
+🔵 16:30 — Прогулка Higashiyama → Gion
+Спускайся по Sannenzaka (каменная лестница с лавками), затем Ninenzaka.
+Лучшие фото в 17:00–17:30 (закат, включаются фонари).
+
+🔵 19:30 — Ужин в Gion
+Ищи места подальше от главной толпы (на боковых улицах).
+Соба ¥1500–2000. Темпура ¥2000–2500.
+
+🔵 21:00 — Бар Bee's Knees
+Джаз-бар в Gion. Адрес: Fonte Building, 2-й этаж (ищи вывеску с пчелой).
+Коктейли ¥1500. Всего 10 мест — если занято, жди на улице.`,
+
+    `=== ДЕНЬ 6 — КИОТО (КИМОНО, НИДЗЁ, СЕВЕР, НИСИКИ) ===
+
+🔵 9:30 — Аренда кимоно
+¥3000–5000. Приходи к открытию (09:00) — выбор максимальный.
+Возврат до 17:00–18:00.
+💡 Забронируй заранее на Klook, чтобы не ждать.
+
+🔵 10:30 — Nijo Castle
+От магазина кимоно пешком 5–10 минут.
+Вход ¥1300. Соловьиные полы — пищат под ногами (защита от ниндзя).
+
+🔵 12:30 — Обед
+Удон, соба или кацудон. ¥1000–1200.
+Аккуратно в кимоно — не облей, не сядь на складки.
+
+🔵 13:30 — Возврат кимоно
+Вернись вовремя. Опоздаешь — штраф.
+
+🔵 14:30 — Kinkaku-ji (Золотой павильон)
+Такси ¥2500–3000 или автобус 101/205 (¥250, 40–50 мин).
+Вход ¥500. Павильон покрыт сусальным золотом.
+
+🔵 15:30 — Ryoan-ji (сад камней)
+От Kinkaku-ji пешком 15 минут по указателям.
+Вход ¥600. 15 камней, но с любого ракурса видно 14.
+
+🔵 16:30 — Nishiki Market
+⚠️ РАБОТАЕТ ДО 18:00. Лавки сворачиваются к 18:30.
+💳 Наличные — карты не везде.
+Что брать: устрицы ¥300–500, тунец о-торо ¥1000–1500, угорь ¥600, вагью ¥1500.
+
+🔵 19:30 — Прощальный ужин
+Изакая в Pontocho. ¥3000–4000.
+Завтра выезд в Хаконэ в 09:00.`,
+
+    `=== ДЕНЬ 7 — КИОТО → ХАКОНЕ ===
+
+🔵 9:00 — Выход из рёкана
+Сдать ключи. Прощайся с персоналом.
+
+🔵 10:00 — Синкансэн Киото → Одавара
+¥12000 ($80). 2 часа. Non-reserved — вагоны 1–3.
+
+🔵 12:00 — Одавара → Хаконэ-Юмото
+Hakone Tozan Line, ¥330, 15 минут.
+
+🔵 12:30 — Заселение в рёкан
+Оставить вещи. Уточни время ужина (обычно 17:30–19:30).
+
+🔵 13:30 — Обед в Хаконэ-Юмото
+Тофу-доно ¥1200–1500 или соба с грибами мацутакэ ¥1500.
+
+🔵 15:00 — Овакудани (Долина Ада)
+Канатка, геотермальная зона. Чёрные яйца ¥500 за 5 шт.
+💡 Если погода ясная — видно Фудзию.
+
+🔵 18:00 — Пиратский корабль на озере Аси
+Входит в Hakone Free Pass. Вид на тории храма Хаконэ в воде.
+
+🔵 20:30 — Ужин в рёкане
+Кайсеки — многоблюдная трапеза из сезонных продуктов.
+
+🔵 22:00 — Приватный онсен
+Температура 40–42°C. Сначала душ, потом купель.
+Открытая купель с видом на горы — лучший момент дня.`,
+
+    `=== ДЕНЬ 8 — ХАКОНЕ → ТОКИО ===
+
+🔵 7:00 — Приватный онсен (утренний)
+Второй заход — лучшее время. До выезда и до толп туристов.
+
+🔵 8:00 — Завтрак в рёкане
+Рыба на гриле, рис, мисо-суп, овощи.
+
+🔵 9:00 — Выезд из рёкана
+Сдать ключи. Персонал будет махать вслед — это традиция.
+
+🔵 10:00 — Хаконэ → Одавара
+Шаттл до станции, поезд. 30–40 минут.
+
+🔵 11:00 — Синкансэн Одавара → Токио
+¥4500 ($30). 35–45 минут. Выход на Синдзюку.
+
+🔵 12:00 — Прибытие в Токио
+Заселение в отель.`
+];
+
+// ===== ЗАГРУЗКА / СОХРАНЕНИЕ ПЛАНА =====
+function loadPlan() {
+    try {
+        const saved = localStorage.getItem('japanese_plan_texts');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                return parsed;
+            }
+        }
+    } catch(e) {}
+    return [...defaultPlanTexts];
+}
+
+function savePlanTexts(texts) {
+    try {
+        localStorage.setItem('japanese_plan_texts', JSON.stringify(texts));
+    } catch(e) {}
+}
+
+// ===== РЕНДЕР ПЛАНА =====
+let planCollapsed = {};
+
+function renderPlan() {
+    const texts = loadPlan();
+    const container = document.getElementById('planContainer');
+    if (!container) return;
+    
+    texts.forEach((_, i) => {
+        if (!(i in planCollapsed)) {
+            planCollapsed[i] = false;
+        }
+    });
+    
+    let html = '';
+    texts.forEach((text, idx) => {
+        const isCollapsed = planCollapsed[idx] || false;
+        const titleMatch = text.match(/^=== (.+?) ===/m);
+        const title = titleMatch ? titleMatch[1] : `День ${idx + 1}`;
+        
+        html += `<div class="plan-day fade-in" style="animation-delay: ${idx * 0.05}s">`;
+        html += `<div class="plan-day-header" data-day="${idx}">`;
+        html += `<h4>${title}</h4>`;
+        html += `<button class="day-toggle" data-day="${idx}">${isCollapsed ? 'Развернуть' : 'Свернуть'}</button>`;
+        html += `</div>`;
+        html += `<textarea data-day="${idx}" style="${isCollapsed ? 'display:none;' : ''}">${text}</textarea>`;
+        html += `<div class="day-actions">`;
+        html += `<button class="btn-danger" data-day="${idx}">🗑️ Удалить день</button>`;
+        html += `<button data-day="${idx}" class="add-day-after">➕ Добавить день после</button>`;
+        html += `</div>`;
+        html += `</div>`;
+    });
+    
+    container.innerHTML = html;
+    
+    container.querySelectorAll('.plan-day-header').forEach(header => {
+        header.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON') return;
+            const dayIdx = parseInt(this.dataset.day);
+            toggleDay(dayIdx);
+        });
+    });
+    
+    container.querySelectorAll('.day-toggle').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dayIdx = parseInt(this.dataset.day);
+            toggleDay(dayIdx);
+        });
+    });
+    
+    container.querySelectorAll('.btn-danger').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const dayIdx = parseInt(this.dataset.day);
+            const texts = loadPlan();
+            if (confirm(`Удалить "${texts[dayIdx].match(/^=== (.+?) ===/m)?.[1] || 'день'}"?`)) {
+                texts.splice(dayIdx, 1);
+                savePlanTexts(texts);
+                const newCollapsed = {};
+                Object.keys(planCollapsed).forEach(key => {
+                    const k = parseInt(key);
+                    if (k < dayIdx) newCollapsed[k] = planCollapsed[k];
+                    else if (k > dayIdx) newCollapsed[k - 1] = planCollapsed[k];
+                });
+                planCollapsed = newCollapsed;
+                renderPlan();
+            }
+        });
+    });
+    
+    container.querySelectorAll('.add-day-after').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const dayIdx = parseInt(this.dataset.day);
+            const texts = loadPlan();
+            texts.splice(dayIdx + 1, 0, `=== Новый день ===\n\n🔵 Время — Действие\nОписание.\n\n💡 Советы и предупреждения.`);
+            savePlanTexts(texts);
+            const newCollapsed = {};
+            Object.keys(planCollapsed).forEach(key => {
+                const k = parseInt(key);
+                if (k <= dayIdx) newCollapsed[k] = planCollapsed[k];
+                else newCollapsed[k + 1] = planCollapsed[k];
+            });
+            newCollapsed[dayIdx + 1] = false;
+            planCollapsed = newCollapsed;
+            renderPlan();
+            const newDay = container.querySelectorAll('.plan-day')[dayIdx + 1];
+            if (newDay) newDay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    });
+}
+
+function toggleDay(idx) {
+    const textarea = document.querySelector(`textarea[data-day="${idx}"]`);
+    const btn = document.querySelector(`.day-toggle[data-day="${idx}"]`);
+    if (!textarea || !btn) return;
+    
+    planCollapsed[idx] = !planCollapsed[idx];
+    const isCollapsed = planCollapsed[idx];
+    textarea.style.display = isCollapsed ? 'none' : '';
+    btn.textContent = isCollapsed ? 'Развернуть' : 'Свернуть';
+}
+
+document.getElementById('savePlan')?.addEventListener('click', function() {
+    const textareas = document.querySelectorAll('#planContainer textarea');
+    const texts = [];
+    textareas.forEach(ta => {
+        texts.push(ta.value);
+    });
+    if (texts.length > 0) {
+        savePlanTexts(texts);
+        const status = document.getElementById('planSaveStatus');
+        if (status) {
+            status.textContent = '✅ Сохранено!';
+            setTimeout(() => { status.textContent = ''; }, 2000);
+        }
+    }
+});
+
+document.getElementById('addDayBtn')?.addEventListener('click', function() {
+    const texts = loadPlan();
+    texts.push(`=== Новый день ===\n\n🔵 Время — Действие\nОписание.\n\n💡 Советы и предупреждения.`);
+    savePlanTexts(texts);
+    const newIdx = texts.length - 1;
+    planCollapsed[newIdx] = false;
+    renderPlan();
+    const newDay = document.querySelectorAll('#planContainer .plan-day');
+    if (newDay[newIdx]) {
+        newDay[newIdx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const ta = newDay[newIdx].querySelector('textarea');
+        if (ta) setTimeout(() => ta.focus(), 300);
+    }
+});
+
+document.getElementById('resetPlan')?.addEventListener('click', function() {
+    if (confirm('Сбросить план к стандартному? Все изменения будут потеряны.')) {
+        localStorage.removeItem('japanese_plan_texts');
+        planCollapsed = {};
+        renderPlan();
+        const status = document.getElementById('planSaveStatus');
+        if (status) {
+            status.textContent = '🔄 Сброшено';
+            setTimeout(() => { status.textContent = ''; }, 2000);
+        }
+    }
+});
+
+// ============================================================
+// ЧЕК-ЛИСТ
+// ============================================================
+
+let checklistData = {
+    items: [
+        { id: 'doc_passport', text: 'Загранпаспорт (срок > 6 месяцев)', done: false },
+        { id: 'doc_visa', text: 'Виза (если нужна, подавать за 1–2 месяца)', done: false },
+        { id: 'doc_insurance', text: 'Страховка (медицинская, обязательно!)', done: false },
+        { id: 'doc_tickets', text: 'Авиабилеты (распечатать или в телефоне)', done: false },
+        { id: 'doc_hotels', text: 'Брони отелей (распечатать или в телефоне)', done: false },
+        { id: 'finance_cash', text: 'Наличные иены (частично для первого дня)', done: false },
+        { id: 'finance_jrpass', text: 'JR Pass (купить ДО поездки, активировать)', done: false },
+        { id: 'finance_bank', text: 'Уведомить банк о поездке', done: false },
+        { id: 'tech_charger', text: 'Зарядка для телефона и power bank', done: false },
+        { id: 'tech_adapter', text: 'Переходник для розетки (плоские вилки)', done: false },
+        { id: 'tech_esim', text: 'eSIM или Pocket Wi-Fi (заказать заранее)', done: false },
+        { id: 'apps_maps', text: 'Google Maps (скачать офлайн-карты)', done: false },
+        { id: 'apps_translate', text: 'Google Translate / DeepL', done: false },
+        { id: 'apps_navitime', text: 'Japan Travel by Navitime', done: false },
+        { id: 'health_kit', text: 'Аптечка (обезбол, от желудка, пластыри)', done: false },
+        { id: 'health_meds', text: 'Лекарства (если принимаете постоянно)', done: false },
+        { id: 'health_mask', text: 'Маска (для транспорта и храмов)', done: false },
+        { id: 'other_currency', text: 'Узнать курс иены', done: false },
+        { id: 'other_phrases', text: 'Скачать японские фразы (база)', done: false },
+        { id: 'other_hours', text: 'Узнать часы работы храмов/музеев', done: false },
+        { id: 'other_list', text: 'Написать список достопримечательностей', done: false }
+    ]
+};
+
+function loadChecklist() {
+    try {
+        const saved = localStorage.getItem('japanese_checklist');
+        if (saved) {
+            const data = JSON.parse(saved);
+            checklistData.items.forEach(item => {
+                const found = data.items.find(d => d.id === item.id);
+                if (found) item.done = found.done;
+            });
+        }
+    } catch(e) {}
+    return checklistData;
+}
+
+function saveChecklist() {
+    try {
+        localStorage.setItem('japanese_checklist', JSON.stringify(checklistData));
+    } catch(e) {}
+}
+
+function renderChecklist() {
+    const container = document.getElementById('checklistContainer');
+    if (!container) return;
+    
+    const data = loadChecklist();
+    const total = data.items.length;
+    const done = data.items.filter(item => item.done).length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    
+    const progress = document.getElementById('checklistProgress');
+    if (progress) progress.style.width = pct + '%';
+    
+    const stats = document.getElementById('checklistStats');
+    if (stats) stats.textContent = `${done} из ${total} выполнено (${pct}%)`;
+    
+    const sections = {
+        'Документы': ['doc_passport', 'doc_visa', 'doc_insurance', 'doc_tickets', 'doc_hotels'],
+        'Финансы': ['finance_cash', 'finance_jrpass', 'finance_bank'],
+        'Техника': ['tech_charger', 'tech_adapter', 'tech_esim'],
+        'Приложения': ['apps_maps', 'apps_translate', 'apps_navitime'],
+        'Здоровье': ['health_kit', 'health_meds', 'health_mask'],
+        'Прочее': ['other_currency', 'other_phrases', 'other_hours', 'other_list']
+    };
+    
+    let html = '';
+    for (const [sectionName, ids] of Object.entries(sections)) {
+        html += `<div class="checklist-section">`;
+        html += `<h4>${sectionName}</h4>`;
+        ids.forEach(id => {
+            const item = data.items.find(i => i.id === id);
+            if (!item) return;
+            const doneClass = item.done ? 'done' : '';
+            html += `<div class="checklist-item ${doneClass}" data-id="${id}">`;
+            html += `<input type="checkbox" ${item.done ? 'checked' : ''}>`;
+            html += `<label>${item.text}</label>`;
+            html += `</div>`;
+        });
+        html += `</div>`;
+    }
+    
+    container.innerHTML = html;
+    
+    container.querySelectorAll('.checklist-item').forEach(el => {
+        const checkbox = el.querySelector('input[type="checkbox"]');
+        const id = el.dataset.id;
+        
+        const toggle = function(e) {
+            e.stopPropagation();
+            const data = loadChecklist();
+            const item = data.items.find(i => i.id === id);
+            if (item) {
+                item.done = !item.done;
+                saveChecklist();
+                renderChecklist();
+            }
+        };
+        
+        checkbox.addEventListener('change', toggle);
+        el.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'INPUT') {
+                toggle(e);
+            }
+        });
+    });
+}
+
+// ============================================================
+// ЗАМЕТКИ
+// ============================================================
+
+const notesArea = document.getElementById('notes');
+const saveStatus = document.getElementById('saveStatus');
+if (notesArea) {
+    notesArea.value = localStorage.getItem('japanese_notes') || '';
+}
+const saveBtn = document.getElementById('saveNotes');
+if (saveBtn) {
+    saveBtn.addEventListener('click', function() {
+        if (notesArea) {
+            localStorage.setItem('japanese_notes', notesArea.value);
+        }
+        if (saveStatus) {
+            saveStatus.textContent = '✅ Сохранено!';
+            setTimeout(() => { saveStatus.textContent = ''; }, 2000);
+        }
+    });
+}
+
+// ============================================================
+// ИНИЦИАЛИЗАЦИЯ
+// ============================================================
+
+loadProgress('min');
+const topics = getTopicsForVersion('min');
+const topicNames = Object.keys(topics);
+if (topicNames.length > 0) {
+    currentTopic = topicNames[0];
+    const range = topics[currentTopic];
+    if (range) {
+        currentDayIndex = range.start;
+    }
+}
+render();
+loadChecklist();
+renderPlan();
+renderChecklist();
+
+document.querySelectorAll('.top-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        setTimeout(() => {
+            if (this.dataset.tab === 'tab-trip') {
+                renderPlan();
+            }
+            if (this.dataset.tab === 'tab-tips') {
+                renderChecklist();
+            }
+        }, 100);
+    });
+});
+</script>
+</body>
+</html>
